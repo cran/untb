@@ -17,22 +17,31 @@ is.count(a)
   \item{a}{Ecosystem data.  In function \code{as.count()}, if a table,
     interpret as species count data; otherwise, interpret as census
     data.  Special dispensation is made for single rows of a dataframe}
-  \item{add}{Character, with default \code{""} (empty string) meaning to
-    leave the species names unchanged.  A non-empty string is prepended
-    to the species names.  This is useful if the species names are
-    integers because the display can become confusing}
+  \item{add}{In function \code{as.count()}, character argument with
+    default \code{""} (empty string) meaning to leave the species
+    names unchanged.  A non-empty string is prepended
+    to the species names using \code{paste()}.  This is useful if the
+    species names are integers because the display can become confusing}
 }
 \details{
-  Semantically, a \dQuote{count} is a list of species together with
-  their abundance.  In~\R\ idiom, a count  is a table of species
-  abundances.
+  A \dQuote{count} object is a list of species together with
+  their abundance.  It also has class \dQuote{table}; compare
+  \dQuote{census} objects.
   
-  An object of class count is a table sorted from most to least abundant
-  species.  The singletons are thus tabulated last.
+  An object of class \dQuote{count} is a table sorted from most to least
+  abundant species.  The singletons are thus tabulated last.
 
-  Function \code{count()} takes a named vector, the elements of which
-  are interpreted as abundances and the names of which are interpreted
-  as species names.
+  Function \code{count()} takes a vector, the elements of which
+  are interpreted as abundances.  If any of the elements are named, the
+  names are interpreted as species names (unnamed elements are given
+  the null name).  If the vector is unnamed, then the species names are
+  upper case letters, with the first element being named
+  \dQuote{\code{A}}, the second \dQuote{\code{B}}, and so on; this
+  behaviour is inherited from \code{as.table()}.  Note that
+  this means that the species names are not necessarily in alphabetical
+  order.  To access or change species names, use \code{names()} and
+  \code{names<-} respectively.
+
 }
 \value{
   Returns an object of class \dQuote{count}.

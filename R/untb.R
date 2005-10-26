@@ -1,16 +1,26 @@
-"display.untb" <- function(start, gens=100, prob.of.mutate=0.001, cex=3,
-                      individually=TRUE, 
-                      flash=FALSE,t1=0, flashsleep=0.1, ...){
+"expected.abundance" <- function(J, theta){
+  a <- parts(J)
+  f <- function(x){theta.prob(theta=theta,x=extant(count(x)),give.log=FALSE)}
+  probs <- apply(a,2,f)
+  return(count(apply(sweep(a,2,probs,"*"),1,sum)))
+}
+
+
+"display.untb" <- function(start, gens=100, prob.of.mutate=0, cex=3,
+                      individually=TRUE, ask=FALSE,
+                      flash=FALSE, delay=0, cols=NULL, ...){
 
   spp <- as.integer(as.census(start))
   n <- length(spp)
-  cc <- rgb(red=runif(n),blue=runif(n),green=runif(n))
+  if(is.null(cols)){
+    cols <- rgb(red=runif(n),blue=runif(n),green=runif(n))
+  }
   n.sqrt <- floor(sqrt(n))
   
   e <- expand.grid(1:n.sqrt , 1:n.sqrt)
-
-  plot(e,col=cc[(spp %% n)+1
-  ],pch=16,cex=cex,axes=FALSE,xlab="",ylab="", ...)
+  colnames(e) <- c("" , "")
+  plot(e,col=cols[(spp %% n)+1], pch=16, cex=cex,
+       axes=FALSE, ...)
 
   if(individually){
     for(i in 1:gens){
@@ -20,23 +30,31 @@
       } else {
         spp[j] <- sample(spp,1)
       }
+      if(ask){
+        readline("hit return to continue")
+      }
       if(flash){
         for(i in 1:8){
           points(e[j,],pch=1,cex=4,col="black")
-          Sys.sleep(flashsleep)
+          Sys.sleep(0.15)
           points(e[j,],pch=1,cex=4,col="white")
-          Sys.sleep(flashsleep)
+          Sys.sleep(0.15)
         }
       }
-      points(e[j,],col=cc[spp[j]],pch=16,cex=cex, ...)
-      Sys.sleep(t1)
+      points(e[j,],col=cols[spp[j]],pch=16,cex=cex, ...)
+      Sys.sleep(delay)
+
     }
   } else {
     for(i in 1:gens){
-      plot(e,col=cc[(spp %%n)+1
-    ],pch=16,cex=cex,axes=FALSE,xlab="",ylab="", ...)
+      plot(e,col=cols[(spp %%n)+1],
+           pch=16,cex=cex,axes=FALSE, ...)
       spp <- select(spp,prob.of.mutate=prob.of.mutate)
-      Sys.sleep(t1)
+            if(ask){
+        readline("hit return to continue")
+      }
+
+      Sys.sleep(delay)
     }
   }
   return(invisible(spp))
@@ -86,12 +104,20 @@
   apply(x,1,function(u){length(unique(u))})
 }
 
-"no.of.spp" <- function(x){
-  length(as.count(x))
+"no.of.spp" <- function(x,include.extinct=FALSE){
+  if(include.extinct){
+    return(length(as.count(x)))
+  } else {
+    return(sum(as.count(x) > 0))
+  }
 }
 
 "no.of.ind" <- function(x){
   sum(as.count(x))
+}
+
+"no.of.extinct" <- function(x){
+  sum(as.count(x)==0)
 }
 
 "species.table" <- function(x){
@@ -99,17 +125,27 @@
   drop(t(apply(x,1,tabulate,nbins=max(x))))
 }
 
-"abundance.curve" <- function(x, show.uncertainty=FALSE, n=10, ...){
+"plot.census" <- function(x, uncertainty=FALSE, expectation=FALSE, theta=NULL, n=10, ...){
   x <- as.count(x)
-  plot(sort(x,decreasing=TRUE),log="y", col="red",pch=16,type="b")
-  if(show.uncertainty){
-    prob <- optimal.prob(x)
+  plot.default(x,log="y", col="red",pch=16,type="b", xlab="species rank in abundance", ylab="abundance", ...)
+  if(uncertainty|expectation){
+    J <- no.of.ind(x)
+    if(is.null(theta)){
+      theta <- optimal.theta(x)
+      }
+  }
+  if(uncertainty){
     for(i in 1:n){
-      jj <- untb(start=x, prob.of.mutate=prob, ...)
-      points(1:length(jj),jj,type="l",col="gray")
+      jj <- rand.neutral(J=J, theta=theta)
+      points(1:no.of.spp(jj),jj,type="l",col="gray")
     }
   }
+  if(expectation){
+    points(1:J,expected.abundance(J=J,theta=theta),type="b",pch=16)
+  }
 } 
+
+"plot.count" <- plot.census
 
 "preston" <- function(x, n=8,original=FALSE){
   if(n<2){stop("n must be >= 2")}
@@ -143,9 +179,6 @@
   return(out)
 }
 
-
-
-
 "print.preston" <- function(x, ...){
   x <- t(as.matrix(x))
   rownames(x) <- "number of species"
@@ -153,21 +186,50 @@
   NextMethod("print")
 }
 
-"optimal.prob" <- function(x, interval=NULL, ...){
-  if(!is.table(x)){
-    x <- table(x)
-  }
-  J <- sum(x)
+"optimal.theta" <- function(x, interval=NULL, N=NULL, like=NULL, ...){
+  x <- as.count(x)
+  J <- no.of.ind(x)
+  S <- no.of.spp(x)
   if(is.null(interval)){
     interval <- c(0.001/J,J)
   }
+  jj <- 
+    optimize(f=theta.likelihood, interval=interval, maximum=TRUE,
+             give.log=TRUE, x=NULL, S=S,J=J, ...)
+  
+  theta.mle <- jj$maximum
+  max.like <- jj$objective
 
-  theta <-
-optimize(f=theta.likelihood,interval=interval,maximum=TRUE,give.log=TRUE,x=x, ...)$maximum 
-  prob <- theta/(2*J)
-  return(prob)
+  if( !is.null(N) & !is.null(like)){
+    stop("N and like non-null.   Specify one only")
+  } 
+  if(!is.null(N)){ #run parametric resampling
+    theta.dist <- rep(NA,N)
+    for(i in 1:N){
+      jj <- rand.neutral(J=J, theta=theta.mle)
+      theta.dist[i] <- Recall(x=jj, ...)
+    }
+    return(theta.dist)
+  }
+  if(!is.null(like)){ #run likelihood estimate for credible interval
+    g <- function(theta){
+      theta.likelihood(theta=theta, S=S,J=J, give.log=TRUE)-max.like+like
+    }
+    return(c(
+             lower=uniroot(f=g,lower=1/J,upper=theta.mle)$root,
+             mle=theta.mle,
+             upper=uniroot(f=g,lower=theta.mle,upper=J)$root
+             )
+           )
+  }
+  return(theta.mle)  # return MLE.
 }
- 
+
+"optimal.prob" <- function(x, interval=NULL, N=NULL, like=NULL, ...){
+  optimal.theta(x=x,interval=interval, N=N, like=like, ...)/(2*no.of.ind(x))
+}
+
+
 #"species.abundance" <- function(x){
 #  xx <- unique(x)
 #  out <- rbind(species.id=xx, abundance=tabulate(match(x,xx)))
@@ -175,44 +237,38 @@ optimize(f=theta.likelihood,interval=interval,maximum=TRUE,give.log=TRUE,x=x, ..
 #  colnames(out) <- rep(" ",ncol(out))
 #  out}
 
+
 "theta.prob" <-
-  function(theta, x=NULL, S=no.of.spp(x), J=no.of.ind(x), give.log=FALSE){
-    if(!missing(x)){
-      J <- no.of.ind(x)
-      S <- no.of.spp(x)
-    }
-    if(give.log){
-      mylog <- function(x){ifelse(x>0,log(x),0)}
-      
-      return(
-             lgamma(J+1) + S*log(theta) - sum(jj*mylog(1:length(jj))) -
-             sum(lgamma(jj+1)) - sum(log( (1:J)+theta-1))
+  function(theta, x=NULL, give.log=TRUE){
+    J <- no.of.ind(x)
+    S <- no.of.spp(x)
+    jj <- phi(x)
+    out <-  (
+             + theta.likelihood(theta=theta,S=S,J=J,give.log=TRUE)
+             + lgamma(J+1)
+             - sum(jj*log(1:length(jj)))
+             - sum(lgamma(jj+1))
              )
+    
+    if(give.log){
+      return(out)
     }  else {
-      return(
-             (factorial(J)*theta^S)/
-             (  prod((1:length(jj))^jj)*prod(factorial(jj))*prod((1:J)+theta-1))
-             )
+      return(exp(out))
     }
   }
 
-"theta.likelihood" <-
-  function(theta, x=NULL, S=no.of.spp(x), J=no.of.ind(x), give.log=FALSE){
-    if(!missing(x)){
-      J <- no.of.ind(x)
-      S <- no.of.spp(x)
-    }
-    if(give.log){
-      return(
-             (S-1)*log(theta) - sum(log((1:J) + theta - 1))
-             )
-    } else {
-      return(
-             theta^(S-1)/prod((2:J)+theta-1)
-             )     
-    }
-  }
 
+"theta.likelihood" <- function(theta, x=NULL, S=NULL, J=NULL, give.log=TRUE){
+   if(!is.null(x)){
+    J <- no.of.ind(x)
+    S <- no.of.spp(x)
+  }
+  if(give.log){
+    return(S*log(theta) + lgamma(theta) - lgamma(theta+J))
+  } else {
+    return(theta^S*exp(lgamma(theta)-lgamma(theta+J)))
+  }
+}
 "phi" <- function(x,addnames=TRUE){
   x <- as.count(x)
   jj <- table(x)
@@ -239,7 +295,11 @@ optimize(f=theta.likelihood,interval=interval,maximum=TRUE,give.log=TRUE,x=x, ..
 }
 
 "as.census" <- function(a){
-  census(as.count(a))
+  if(is.census(a)){
+    return(a)
+  } else {
+    return(census(as.count(a)))
+  }
 }
 
 "count" <- function(a){
@@ -298,18 +358,230 @@ fishers.alpha <- function(N, S, give=FALSE){
 }
 
 "summary.count" <- function(object, ...){
-  cat("Number of individuals:", no.of.ind(object),"\n") 
-  cat("Number of species:", no.of.spp(object),"\n") 
-  cat("Number of singletons:", no.of.singletons(object),"\n") 
-  cat("Most abundant species: ", names(object[1])," (",object[1],")","\n",sep="")
+  object <- as.count(object) 
+  out <- list(
+           no.of.ind         = no.of.ind(object),
+           no.of.spp         = no.of.spp(object),
+           no.of.singletons  = no.of.singletons(object),
+           maximal.abundance = object[1],
+           most.abundant.spp = names(object[1])
+           )
+  class(out) <- "summary.count"
+  return(out)
 }
 
-"summary.census" <- function(object, ...){
-  summary(as.count(object))
+"summary.census" <- summary.count
+
+"print.summary.count" <- function(x, ...){
+  cat("Number of individuals:", x[[1]],"\n") 
+  cat("Number of species:", x[[2]],"\n") 
+  cat("Number of singletons:", x[[3]],"\n") 
+  cat("Most abundant species: ", x[[5]]," (",x[[4]]," individuals)","\n",sep="")
 }
 
 "simpson" <- function(x){
   x <- as.count(x)
   J <- no.of.ind(x)
   return(1-sum(x*(x-1))/(J*(J-1)))
+}
+
+"rand.neutral" <- function(J, theta=NULL, prob.of.mutate=NULL, string=NULL, pad=FALSE){
+  if(!xor(is.null(theta) , is.null(prob.of.mutate))){
+    stop("must supply exactly one of theta and prob.of.mutate")
+  }
+  if(is.null(theta)){
+    theta <- 2*J*prob.of.mutate
+  }
+  out <- rep(NA,J)
+  spp <- 1
+  out[1] <- spp
+  for(j in 2:J){
+    sg <- theta/(theta+j-1)
+    if(runif(1) < sg){
+      #new species
+      spp <- spp+1
+      out[j] <- spp
+    } else {
+      #existing species
+      out[j] <- sample(out[1:(j-1)],size=1)
+    }
+  }
+  if(!is.null(string)){
+    out <- paste(string,out,sep="")
+  }
+  out <- as.count(out)
+  if(pad){
+    extras <- J-no.of.spp(out)
+    if(extras>0){
+      jj <- rep(0,extras)
+      names(jj) <- paste("extinct.",1:extras,sep="")
+      out <- out + count(jj)
+    }
+  }
+  return(out)
+}
+
+"extractor" <- function(x, index){
+  jj <- names(x)
+  x <- x[index,,drop=FALSE]
+  if(isTRUE(all.equal(1,nrow(x)))){
+        x <- as.numeric(x)
+    names(x) <- jj
+    return(count(x))
+  } else {
+    return(x)
+  }
+}
+
+"extant" <- function(x){
+  x <- as.count(x)
+  count(x[x>0])
+}
+
+"extinct" <- function(x){
+  x <- as.count(x)
+  count(x[x==0])
+}
+  
+"+.count" <- function(a,b){
+  a <- as.count(a)
+  b <- as.count(b)
+  both <- c(a,b)
+  as.count(as.table(tapply(both,names(both),sum)))
+}
+
+"logkda.a11" <- function(a){
+  data(logS1)
+  N <- no.of.ind(a)
+  S <- no.of.spp(a)
+
+  "f" <- function(x){
+    total <- 0
+    for(i in 1:length(x)){
+      total <- total + logS1[a[i],x[i]]
+    }
+    total <- total + sum(lgamma(x)) - sum(lgamma(a))
+    return(exp(total))
+  }
+  
+  kda <- c(1,rep(NA,N-S))
+  for(A in (S+1):N){
+    jj <- 1+blockparts(A-S,a-1)
+    kda[A-S+1] <- sum(apply(jj,2,f))
+  }
+  return(log(kda))
+}
+  
+"logkda" <- function(a){
+  a <- as.count(a)
+  i <- 1
+  maxabund <- max(a)
+  jj <- rev(a)
+  specabund <- rbind(unique(jj),table(jj))
+  if(specabund[1,i]==1){
+    i <- i+1
+  }
+  polyn <- 1
+
+  Told <- 1:i
+  for(n in 2:maxabund){
+    Tnew <- (n > (1:n))*Told[pmin( (n-1),1:n)] + Told[pmax(1,(1:n)-1)]*( ((1:n)-1))/(n-1)
+#    print(Tnew)
+    if(specabund[1,i] == n){
+      for(k0 in 1:specabund[2,i]){
+        lenpolyn2 <- length(polyn) + length(Tnew)-1
+        newpolyn <- rep(NA,lenpolyn2)
+        for(k1 in 1:lenpolyn2){
+          k2 <- max(1,k1+1-length(Tnew)):min(length(polyn),k1)
+          newpolyn[k1] <- sum(polyn[k2]*Tnew[k1+1-k2])
+        }
+        polyn <- newpolyn
+#        print("polyn starts")
+#        print(polyn)
+#        print("polyn ends")
+      }
+      i <- i+1
+    }
+    Told <- Tnew[1:n]
+#    print("Told=",Told)
+  }
+  log(polyn)
+}
+
+
+
+"etienne" <- function(theta, m, D, log.kda=NULL, give.log=TRUE, give.like=TRUE){
+  J <- no.of.ind(D)
+  S <- no.of.spp(D)
+
+  
+  if(is.null(log.kda)){
+    log.kda <- logkda(D)
+  }
+  A <- S:J
+  if(m != 1){
+    I <- m*(J-1)/(1-m)
+    correction.factor <- 
+      sum(  
+          exp(
+              log.kda
+              +lgamma(theta+J)
+              -lgamma(theta+A)
+              +lgamma(I)
+              -lgamma(I+J)
+              +A*log(I)
+              )
+          )
+  } else {
+    correction.factor <- 1
+  }
+  if(give.like){
+    if(give.log){
+      return(theta.likelihood(theta=theta,S=S,J=J, give.log=TRUE) + log(correction.factor))
+    } else {
+      return(theta.likelihood(theta=theta,S=S,J=J, give.log=FALSE) * correction.factor)
+    }
+  } else {
+    jj <- theta.prob(theta=theta,x=D) * correction.factor
+    if(give.log){
+      return(log(jj))
+    } else {
+      return(jj)
+    }
+  }
+}
+
+"optimal.params" <- function(D, start=NULL, give=FALSE, ...){
+  log.kda <- logkda(D)
+  if(is.null(start)){
+    thetadash <- log(optimal.theta(D))
+    mdash <- 0
+  } else {
+    thetadash <- log(start[1])
+    mdash <- tan(  (pi/2)*(2*start[2]-1)  )
+  }
+
+  par <- c(thetadash=thetadash, mdash=mdash)  
+  f <- function(p){
+    thetadash=p[1]
+    mdash=p[2]
+    jj <- 
+    -etienne(theta = exp(thetadash),
+            m = 0.5*(1+(2/pi)*atan(mdash)),
+            D = D, log.kda = log.kda, give.like = TRUE,give.log=TRUE)
+   
+    return(jj)
+  }
+  
+  jj <- optim(par=par, fn=f, ...)
+  if(give){
+    return(jj)
+  } else {
+    jj <- jj$par
+    names(jj) <- NULL
+    return(c(
+             theta = exp(jj[1]),
+             m = 0.5*(1+(2/pi)*atan(jj[2]))
+             ))
+  }
 }

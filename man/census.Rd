@@ -18,18 +18,23 @@ is.census(a)
     interpret as species count data; otherwise, interpret as census data}
 }
 \details{
-  Semantically, a \dQuote{census} is a list of individuals.  In \R
-  idiom, a census is a vector whose elements indicate the individuals'
-  species.
+  A \dQuote{census} object is a list of individuals in the form of an
+  unnamed vector whose elements indicate the individuals' species;
+  compare \dQuote{count} objects.
 
-  An object of class census is an unordered factor.  The levels are
-  always in alphabetical order; the vector itself is sorted so that the
-  individuals of the most abundant species appear first, individuals
-  of the second most abundant species appear second, and so on: the
-  singletons appear last.
-
+  An object of class \dQuote{census} is also an unordered factor.  The
+  levels are always in alphabetical order; the vector itself is sorted
+  so that the individuals of the most abundant species appear first,
+  individuals of the second most abundant species appear second, and so
+  on: the singletons appear last.
+  
   Function \code{census()} takes an object of class \dQuote{count} and
-  returns an object of class \dQuote{census}
+  returns an object of class \dQuote{census}.  This function is not
+  really intended for the end user.
+
+  Function \code{as.census()} coerces to class \dQuote{count} then
+  returns \code{census()} of the result.
+
 }
 \value{
   Returns an object of class \dQuote{census}.

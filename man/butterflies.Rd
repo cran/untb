@@ -20,7 +20,7 @@ Texas Birding and Naturalist Web
 }
 \examples{
 data(butterflies)
-abundance.curve(butterflies, show=TRUE)
+plot(butterflies, uncertainty=TRUE)
 
 }
 \keyword{datasets}

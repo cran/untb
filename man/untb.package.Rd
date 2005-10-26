@@ -51,6 +51,6 @@ no.of.spp(a)
 display.untb(start=rep(1,100),prob=0.1,gens=1000)
 
 data(butterflies)
-abundance.curve(butterflies,show=TRUE)
+plot(butterflies,uncertainty=TRUE)
 
 }
