@@ -673,8 +673,8 @@ fishers.alpha <- function(N, S, give=FALSE){
     n <- floor(log(J)/log(2))
     u <- 0:(n-1)
     jj <- rbind(1,cbind(1+2^u,2^(u+1)))
-    f <- function(o){sum(out[o[1]:o[2]])}
-    ans <- apply(jj,1,f)
+    func <- function(o){sum(out[o[1]:o[2]])}
+    ans <- apply(jj,1,func)
     transfer <- out[c(2^u,2^n)]/2
     transfer[is.na(transfer)] <- 0
     ans <- ans-transfer
@@ -847,7 +847,7 @@ return(system(executable.string, intern=TRUE))
     alpha.trunc <- alpha
     alpha.trunc[1:i] <- 0
     theta/(theta+i)*
-      as.function.polynomial(alpha.trunc)(mu)
+      as.function(polynomial(alpha.trunc))(mu)
   }
   return(sum(sapply(1:(J-1),f))*exp(lgamma(mu)-lgamma(mu+J)))
 }
