@@ -1,50 +1,38 @@
 \name{untb}
 \alias{untb}
-\alias{display.untb}
 \alias{select}
 \title{Ecological drift simulation under the Unified Neutral
   Theory of Biodiversity}
 \description{
 Simulates ecological drift under the UNTB.  Function \code{untb()}
-carries out the simulation; function \code{display.untb()} displays
-an ongoing simulation using nice colours.  Function \code{select()}
+carries out the simulation; function  \code{select()}
 carries out a single generational step.
 }
 \usage{
-untb(n = 100, prob.of.mutate = 0.01,  individually = FALSE, gens = 150, keepall = FALSE,
-start.mono = FALSE)
-display.untb(n = 400, gens = 9e+05, prob.of.mutate = 0.001, cex=3, individually
-= TRUE, start.mono = TRUE, flash = FALSE, t1 = 0, flashsleep = 0.1, ...)
-select(a, prob.of.mutate = 0)
+untb(start, prob.of.mutate=0, D=1, gens=150, keep=FALSE, meta=NULL)
+select(a, D=length(a), prob.of.mutate=0, meta=NULL)
 }
 \arguments{
-  \item{n}{Size of ecosystem}
+  \item{a, start}{Starting ecosystem; coerced to class census.  Usually,
+    pass an object of class count; see examples.  To start
+    with a monoculture of size 10, use \code{start=rep(1,10)} and to
+    use \code{start=1:10}.}
   \item{prob.of.mutate}{Probability of mutation}
-  \item{individually}{Boolean, indicating whether the ecosystem should
-    evolve simultaneously (\code{FALSE}), or individually (\code{TRUE})}
+  \item{D}{Number of organisms that die in each timestep}
   \item{gens}{Number of generations to simulate}
-  \item{cex}{In function \code{display.untb()}, the size of the dots
-    used for plotting, defaulting to 3}
-  \item{keepall}{In function \code{untb()} Boolean with default
+  \item{keep}{In function \code{untb()} Boolean with default
     \code{FALSE} meaning to return the system at the end of the
     simulation and \code{TRUE} meaning to return a matrix whose rows are
     the ecosystem at successive times.}
-  \item{start.mono}{Boolean, with default \code{FALSE} meaning to start
-    the simulation with a system of maximal diversity and \code{TRUE} to
-    start with a monoculture}
-  \item{flash}{In function \code{display.untb()},
-    Boolean argument with  \code{TRUE} meaning  to indicate the site
-    of a death/birth with a flashing ring; and default \code{FALSE}
-    meaning to omit the flashing ring and thus simulate \emph{much} faster}
-  \item{t1}{In function \code{display.untb()}, time delay between generations}
-  \item{flashsleep}{In function \code{display.untb()}, time delay of
-    flashing ring}
-  \item{a}{Ecosystem start state for use in function \code{select()}}
-  \item{...}{In function \code{display.untb()}, further arguments passed
-    to \code{plot()} and \code{points()}.}
-}
-\value{
-  Function \code{untb()} returns the final state of the ecosystem.
+  \item{meta}{Metacommunity, as represented by a vector of integers
+    (representing species; thus being a census).  Can be a
+    \dQuote{count} or \dQuote{census} object, in which
+    case it is coerced to a census and thence to an integer vector.
+    Default of \code{NULL} means to use a \dQuote{greedy} system in
+    which every mutation gives rise to a new, previously unencountered
+    species.  This would correspond to an infinitely large, infinitely
+    diverse, Hubbellian ecosystem (which is not too ridiculous an
+    assumption for a small island near a large diverse mainland)}
 }
 \references{
   S. P. Hubbell.  The Unified Neutral Theory of Biodiversity.
@@ -52,12 +40,13 @@ select(a, prob.of.mutate = 0)
 }
 \author{Robin K. S. Hankin}
 \examples{
-untb(n=10, prob=0.1, gens=100)
 
-a <- untb(n=10,prob=0.05, gens=1000,keep=TRUE)
+data(butterflies)
+untb(start=butterflies, prob=0, gens=100)
+
+a <- untb(start=1:10,prob=0.005, gens=1000,keep=TRUE)
 plot(species.count(a),type="b")
 matplot(species.table(a),type="l",lty=1)
 
-display.untb(prob=0.1, gens=1e2)
 }
 \keyword{math}

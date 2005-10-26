@@ -13,6 +13,12 @@ optimal.prob(x, interval=NULL, ...)
     meaning to use a wide interval}
   \item{\dots}{Further arguments passed to \code{optimize()}}
 }
+\note{
+  The fundamental biodiversity parameter \eqn{\theta}{theta} is
+  \eqn{2\nu N}{2*nu*N}, where \eqn{\nu}{nu} is the probability of
+  mutation (eg, as estimated by \code{optimal.prob()}), and \eqn{N} is
+  the size of the ecosystem.
+}
 \author{Robin K. S. Hankin}
 \examples{
 data(butterflies)

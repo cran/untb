@@ -5,9 +5,12 @@
 \title{Copepod data supplied by Phil Pugh}
 \description{
 A dataset of copepod abundances supplied by Dr Phil Pugh of the National
-Oceanography Centre, Soutampton
+Oceanography Centre, Southampton
 }
-\usage{data(copepod)}
+\usage{
+data(copepod)
+data(ostracod)
+}
 \format{
 A table with names of different copepod species, and entries
 corresponding to the numbers of individuals of each species.
@@ -18,7 +21,7 @@ corresponding to the numbers of individuals of each species.
 \examples{
 data(copepod)
 optimize(f=theta.likelihood,interval=c(10,100), maximum=TRUE,
-S=nrow(copepod), J=sum(copepod$count), give.log=TRUE)
+S=no.of.spp(copepod), J=no.of.ind(copepod), give.log=TRUE)
 
 data(ostracod)
 preston(ostracod)

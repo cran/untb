@@ -16,17 +16,21 @@ Version: \tab 1.0\cr
 Date: \tab 2005-10-26\cr
 License: \tab GPL\cr
 }
-The package has two main engines: \code{untb()}, which tracks an
-ecosystem through neutral drift; and \code{display.untb()}, which
-displays a semi-animated graphic.
 
-Function \code{untb()} produces by default an integer vector of length
-\code{n}.  Each element of this vector corresponds to an organism
-(member of an ecosystem) and its species is the value of the element.
+Package \code{untb} uses two classes of object to represent an
+ecosystem: class \code{count} and class \code{census}.  In essense, a
+\code{count} object is a table of species abundances and a \code{census}
+object is a list of individuals.  See \code{?census} and \code{?count}
+for more details.  Although objects of either class can be coerced to
+the other, class \code{count} is the preferred form: it is a more
+compact representation, especially for large ecosystems.
+
+The package simulates neutral ecological drift using function
+\code{untb()}.  Function \code{display.untb()} displays a semi-animated
+graphic of an ecosystem undergoing neutral drift.
 
 
-Functions \code{species.count()} et seq compute ecologically interesting
-diagnostics such as species count and so on.
+
 }
 \author{
 Robin K. S. Hankin
@@ -40,14 +44,13 @@ Maintainer: <r.hankin@noc.soton.ac.uk>
 \keyword{math}
 }
 \examples{
-a <- untb(1000,prob=0.005,gens=5000,keep=FALSE,start.mono=TRUE)
+a <- untb(start=rep(1,100),prob=0.005,gens=5000,keep=FALSE)
 preston(a)
-species.count(a)
-species.abundance(a)
+no.of.spp(a)
 
-display.untb(n=100,prob=0.1,gens=1000)
+display.untb(start=rep(1,100),prob=0.1,gens=1000)
 
 data(butterflies)
-species.curve(butterflies,show=TRUE)
+abundance.curve(butterflies,show=TRUE)
 
 }

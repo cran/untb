@@ -28,7 +28,7 @@ fisher.ecosystem(N, S, nmax, alpha=NULL, c=0)
 }
 \details{
 Function \code{fishers.alpha()} solves for \eqn{\alpha}{alpha} given
-  \eqn{N} and \eqn{S},as per Fisher's table 9, p55.
+  \eqn{N} and \eqn{S}, as per Fisher's table 9, p55.
 
   Given \eqn{N} and \eqn{S} (or \eqn{\alpha}{alpha}), function
   \code{fisher.ecosystem()} generates a Fisherian ecosystem
