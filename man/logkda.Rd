@@ -1,23 +1,45 @@
 \name{logkda}
 \alias{logkda}
 \alias{logkda.a11}
+\alias{logkda.R}
+\alias{logkda.pari}
 \title{Etienne's K(D,A)}
 \description{
-Calculates Etienne's \eqn{K(D,A)}
+Calculates Etienne's \eqn{K(D,A)} using a variety of different methods
 }
 \usage{
-logkda(a)
+logkda.R(a, use.brob=TRUE)
 logkda.a11(a)
+logkda.pari(a, numerical=TRUE)
+logkda(a, method="pari", ...)
 }
 \arguments{
   \item{a}{Count object}
+  \item{use.brob}{In function \code{logkda.R()}, Boolean, with default
+    \code{TRUE} meaning to use Brobdingnagian numbers for the
+    calculation.  This is slower but allows one to analyze larger
+    datasets}
+  \item{numerical}{In function \code{logkda.pari()}, Boolean, with
+    default \code{TRUE} meaning to return a numerical vector and
+    \code{FALSE} meaning to return the string produced by
+    \code{pari/gp}}
+  \item{method}{In function \code{logkda()}, a string specifying which
+    method to use.  Takes \dQuote{R}, \dQuote{a11}, or \dQuote{pari}}
+  \item{...}{In function \code{logkda()}, further arguments which are
+    passed to the other functions}
 }
 \details{
-Function \code{logkda()} calculates \eqn{K(D,A)} using the method
-appearing in Etienne (2005), supplementary online material.  Function
-\code{logkda.a11} is a direct implementation of formula A11 in Etienne
-(2005).
-The formula is
+  The user should use function \code{logkda()}, which is a wrapper for
+  the other functions.  Note that the default method, \code{pari},
+  requires the pari/gp system to be installed.  This is the preferred
+  option because it is much faster than the other methods.
+  
+  Functions \code{logkda.R()} and \code{logkda.pari()} calculate
+  \eqn{K(D,A)} using the method appearing in Etienne (2005), supplementary
+  online material; they use \code{R} and \code{pari/gp} respectively.
+  Function \code{logkda.a11} is a direct implementation of formula A11
+  in Etienne (2005).  The formula is
+
 \deqn{
   K(D,A)=
   \sum_{\left\{a_1,\ldots,a_S|\sum a_i=A\right\}}
@@ -30,25 +52,37 @@ The formula is
  }
 \references{
 R. S. Etienne 2005. \dQuote{A New Sampling Formula for Neutral
-Biodiversity}.  Ecology Letters, volume {8}, pp253--260.
+Biodiversity}.  \emph{Ecology Letters}, volume {8}, pp253--260.
 \code{doi: 10.111/j.1461-0248.2004.00717.x}
+
+C. Batut and K. Belabas and D. Bernardi and H. Cohen and M. Olivier
+2000.  \dQuote{User's guide to PARI/GP}.  \code{url:
+  \code{http://www.parigp-home.de/}}
+
 }
 \author{Robin K. S. Hankin; \code{logkda()} is an \R\ transliteration of
   \code{pari/gp} code appearing in Etienne 2005 (supplementary online
   material) due to Chave.
-  }
-\note{There are two functions here because \code{logkda()}, although
-  faster, is based on a non-obvious method.  Function \code{logkda.a11()}
-  is much slower (especially for large datasets) but the computational
-  method is a direct transcription of formula A11.
+}
+\note{
+  Function \code{logkda.a11()} is included because
+  the computational method is a direct transcription of formula A11; it
+  is very slow.
 
-  The two functions should produce numerically near-identical output.
-  
+  It would be nice to use \code{gp2c} (rather than \code{gp}) but I can't
+  make the \dQuote{\code{-g}} flag work properly; and I had to hack
+  \code{gp2c-run} to make it call \code{gp} with the \code{-q} flag.
 }
 \seealso{\code{\link{etienne}},\code{\link{logS1}}}
 \examples{
 a <- count(c(dogs=7,pigs=3,crabs=1,hogs=1,slugs=1))
-logkda(a)
+
+\dontrun{logkda(a)}
+
+logkda.R(a)
+logkda.R(a, use.brob=FALSE)
 logkda.a11(a)
+# All four should be the same up to numerical errors
+
 }
 \keyword{math}

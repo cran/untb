@@ -3,7 +3,7 @@
 \title{Extract rows of a database in count form}
 \description{
   Extracts rows of a data frame and, if there is one row only, coerces
-  to a data frame, preserving the spcies names
+  to a count object, preserving the species names
 }
 \usage{
 extractor(x, index)

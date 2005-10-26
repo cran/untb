@@ -6,12 +6,16 @@
   Gives a standard Preston diagram for an ecosystem.
 }
 \usage{
-preston(x,n=8,original=FALSE)
+preston(x,n=NULL,original=FALSE)
 }
 \arguments{
-  \item{x}{Ecosystem vector that is coerced to class \code{count}}
+  \item{x}{Ecosystem vector that is coerced to class \code{count}, or a
+    matrix whose rows are species counts}
   \item{n}{An integer specifying the number of species abundance classes
-    to use.  Must be greater than 1.}
+    to use, with default \code{NULL} meaning to use
+    \eqn{1+\log_2(J)}{1+log2(J)}.  Must be greater than 1 if specified.
+    If \code{x} is a vector, \code{NULL} is not acceptable as the
+    program does not try to guess what is required}
   \item{original}{Boolean, with default \code{FALSE} meaning to use the
     nonoverlapping technique discussed below, and \code{TRUE}
     meaning to use Preston's original formulation.}
@@ -26,8 +30,9 @@ number of species 10 5    7    5     1      5      4       0
 }
 
 This shows that there are 10 species with abundance 1 (that is,
-singletons); 5 species with abundance 2; 7 species with abudance 3-4;
-5 species with abundance 5-8, and so on.
+singletons); 5 species with abundance 2; 7 species with abudance 3-4; 5
+species with abundance 5-8, and so on.  This method is used by Hubbell
+(2001), and Chisholm and Burgman (2004).
 
 Setting argument \code{original} to \code{TRUE} means to follow Preston
 (1948) and count any species with an abundance on the boundary between
@@ -44,6 +49,10 @@ where \eqn{\phi_i}{phi_i} is the number of species with abundance
 \references{
   F. W. Preston 1948. \dQuote{The Commonness, and Rarity, of Species}.
   Ecology 29(3):254-283
+
+  R. A. Chisholm and M. A. Burgman 2004. \dQuote{The unified neutral
+    theory of biodiversity and biogeography: comment}.  Ecology 85(11):
+  3172-3174 
 }
 \author{Robin K. S. Hankin}
 \seealso{\code{\link{phi}}}
@@ -54,10 +63,7 @@ data(butterflies)
 preston(butterflies)
 preston(butterflies,original=TRUE)
 
-
 data(copepod)
 preston(copepod)
-preston(copepod, n=21)
-
 }
 \keyword{math}

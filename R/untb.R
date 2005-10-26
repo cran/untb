@@ -49,7 +49,7 @@
     for(i in 1:gens){
       plot(e,col=cols[(spp %%n)+1],
            pch=16,cex=cex,axes=FALSE, ...)
-      spp <- select(spp,prob.of.mutate=prob.of.mutate)
+      spp <- select(spp,prob=prob.of.mutate)
             if(ask){
         readline("hit return to continue")
       }
@@ -60,40 +60,77 @@
   return(invisible(spp))
 }
 
-"select" <- function(a, D=length(a), prob.of.mutate=0, meta=NULL){
+"select" <- function(a, D=length(a), prob=0, meta=NULL){
+  if(is.null(meta)){
+    return(select.mutate(a, D=D, prob.of.mutate=prob))
+  } else {
+    return(select.immigrate(a, D=D, prob.of.immigrate=prob,meta=meta))
+  }
+}
+
+"select.mutate" <- function(a, D=length(a), prob.of.mutate=0){
   n <- length(a)
   died <- sample(n,D,replace=TRUE)
-  mutated <- runif(length(died))<prob.of.mutate
+  mutated <- runif(length(died)) < prob.of.mutate
   n1 <- sum(mutated)
   n2 <- sum(!mutated)
-
+  
   a[died[!mutated]] <- sample(a,n2,replace=TRUE)
-  if(is.null(meta)){
-    a[died[mutated]] <- (1:n1) + max(a)
-  } else {
-    a[died[mutated]] <- sample(meta,n1,replace=TRUE)
+  a[died[mutated]] <- (1:n1) + max(a)
+  return(a)
+}
+
+"select.immigrate" <- function(a, D=length(a), prob.of.immigrate=0, meta){
+  n <- length(a)
+  
+  died <- sample(n,D,replace=TRUE)
+
+  immigrated <- runif(length(died)) < prob.of.immigrate
+  n1 <- sum(immigrated)
+  n2 <- sum(!immigrated)
+  if(n1>0){
+    a[died[immigrated]] <-
+      sample(meta$spp, n1, replace=TRUE, prob=meta$abundance)
+  }
+  if(n2>0){
+    a[died[!immigrated]] <- sample(a, n2, replace=TRUE)
   }
   return(a)
 }
   
-"untb" <- function(start, prob.of.mutate=0, D=1,
+"untb" <- function(start, prob=0, D=1,
   gens=150, keep=FALSE, meta=NULL){
+
+  if(!is.null(meta)){
+    jj <- as.count(start)
+    jj[] <- 0
+    meta <- as.count(meta) + jj
+    jj.meta <-
+      list(
+           spp = as.numeric(names(meta)),
+           abundance = meta
+           )
+  } else {
+    jj.meta <- NULL
+  }
+
   if(is.census(start)|is.count(start)){
     a <- as.integer(as.census(start))
   } else {
     a <- start
   }
+  
   n <- length(a)
   if(keep){
     aa <- matrix(NA,gens,n)
     for(i in 1:gens){
       aa[i,] <- a
-      a <- select(a,D=D,prob.of.mutate=prob.of.mutate,meta=meta)
+      a <- select(a, D=D, prob=prob, meta=jj.meta)
     }
     return(aa)
   } else {
     for(i in 1:gens){
-      a <- select(a,D=D,prob.of.mutate=prob.of.mutate,meta=meta)
+      a <- select(a, D=D, prob=prob, meta=jj.meta)
     }
     return(as.count(a))
   }
@@ -147,7 +184,15 @@
 
 "plot.count" <- plot.census
 
-"preston" <- function(x, n=8,original=FALSE){
+"preston" <- function(x, n=NULL, original=FALSE){
+
+  if(is.null(n)){
+    n <- 1+ceiling(log(maximal.abundance(x))/log(2))
+  }
+  if(is.matrix(x)){
+    warning("x was a matrix supplied and n NULL: setting n=8")
+    n <- 8
+  }
   if(n<2){stop("n must be >= 2")}
   breaks <- c(0,2^(0:(n-2)),Inf)
 
@@ -184,6 +229,10 @@
   rownames(x) <- "number of species"
   class(x) <- "matrix"
   NextMethod("print")
+}
+
+"plot.preston" <- function(x,  ...){
+  barplot(as.table(x), ...)
 }
 
 "optimal.theta" <- function(x, interval=NULL, N=NULL, like=NULL, ...){
@@ -344,7 +393,9 @@ fishers.alpha <- function(N, S, give=FALSE){
   x <- N/(N+alpha)
   j <- 1:nmax
   jj <- rpois(n=nmax,lambda=alpha*x^j/(j+c))
-  return(rep(1:sum(jj) , rep(j,jj)))
+  out <- as.count(rep(1:sum(jj) , rep(j,jj)))
+  names(out) <- paste("sp",names(out),sep=".")
+  return(out)
 }
 
 "singletons" <- function(x){
@@ -357,14 +408,20 @@ fishers.alpha <- function(N, S, give=FALSE){
   return(sum(x==1))
 }
 
+"maximal.abundance" <- function(x){
+  x <- as.count(x)
+  return(x[1])
+}
+
 "summary.count" <- function(object, ...){
   object <- as.count(object) 
   out <- list(
            no.of.ind         = no.of.ind(object),
            no.of.spp         = no.of.spp(object),
            no.of.singletons  = no.of.singletons(object),
-           maximal.abundance = object[1],
-           most.abundant.spp = names(object[1])
+           maximal.abundance = maximal.abundance(object),
+           most.abundant.spp = names(object[1]),
+           estimated.theta   = optimal.theta(object)
            )
   class(out) <- "summary.count"
   return(out)
@@ -377,6 +434,7 @@ fishers.alpha <- function(N, S, give=FALSE){
   cat("Number of species:", x[[2]],"\n") 
   cat("Number of singletons:", x[[3]],"\n") 
   cat("Most abundant species: ", x[[5]]," (",x[[4]]," individuals)","\n",sep="")
+  cat("estimated theta: ",x[[6]],"\n")
 }
 
 "simpson" <- function(x){
@@ -403,7 +461,7 @@ fishers.alpha <- function(N, S, give=FALSE){
       out[j] <- spp
     } else {
       #existing species
-      out[j] <- sample(out[1:(j-1)],size=1)
+      out[j] <- out[sample(j-1,1)]
     }
   }
   if(!is.null(string)){
@@ -451,7 +509,6 @@ fishers.alpha <- function(N, S, give=FALSE){
 }
 
 "logkda.a11" <- function(a){
-  data(logS1)
   N <- no.of.ind(a)
   S <- no.of.spp(a)
 
@@ -466,13 +523,13 @@ fishers.alpha <- function(N, S, give=FALSE){
   
   kda <- c(1,rep(NA,N-S))
   for(A in (S+1):N){
-    jj <- 1+blockparts(A-S,a-1)
+    jj <- 1+blockparts(a-1,A-S)
     kda[A-S+1] <- sum(apply(jj,2,f))
   }
   return(log(kda))
 }
   
-"logkda" <- function(a){
+"logkda.R" <- function(a, use.brob=TRUE){
   a <- as.count(a)
   i <- 1
   maxabund <- max(a)
@@ -482,8 +539,8 @@ fishers.alpha <- function(N, S, give=FALSE){
     i <- i+1
   }
   polyn <- 1
-
   Told <- 1:i
+  
   for(n in 2:maxabund){
     Tnew <- (n > (1:n))*Told[pmin( (n-1),1:n)] + Told[pmax(1,(1:n)-1)]*( ((1:n)-1))/(n-1)
 #    print(Tnew)
@@ -491,6 +548,7 @@ fishers.alpha <- function(N, S, give=FALSE){
       for(k0 in 1:specabund[2,i]){
         lenpolyn2 <- length(polyn) + length(Tnew)-1
         newpolyn <- rep(NA,lenpolyn2)
+        if(use.brob){newpolyn <- as.brob(newpolyn)}
         for(k1 in 1:lenpolyn2){
           k2 <- max(1,k1+1-length(Tnew)):min(length(polyn),k1)
           newpolyn[k1] <- sum(polyn[k2]*Tnew[k1+1-k2])
@@ -508,13 +566,10 @@ fishers.alpha <- function(N, S, give=FALSE){
   log(polyn)
 }
 
-
-
 "etienne" <- function(theta, m, D, log.kda=NULL, give.log=TRUE, give.like=TRUE){
   J <- no.of.ind(D)
   S <- no.of.spp(D)
 
-  
   if(is.null(log.kda)){
     log.kda <- logkda(D)
   }
@@ -551,8 +606,9 @@ fishers.alpha <- function(N, S, give=FALSE){
   }
 }
 
-"optimal.params" <- function(D, start=NULL, give=FALSE, ...){
-  log.kda <- logkda(D)
+"optimal.params" <- function(D, log.kda=NULL, start=NULL, give=FALSE, ...){
+
+  if(is.null(log.kda)){log.kda <- logkda(D)}
   if(is.null(start)){
     thetadash <- log(optimal.theta(D))
     mdash <- 0
@@ -585,3 +641,266 @@ fishers.alpha <- function(N, S, give=FALSE){
              ))
   }
 }
+
+
+"volkov" <- function(J, params, bins=FALSE, give=FALSE){
+  theta <- params[1]
+  m <- params[2]
+  gam <- m*(J-1)/(1-m)
+  integrand <- function(y,n){
+    theta*
+      exp(lgamma(J+1) - lgamma(n+1) - lgamma(J-n+1) + 
+          lgamma(gam) - lgamma(J+gam) + 
+          lgamma(n+y) + lgamma(J-n+gam-y) - lgamma(1+y) - lgamma(gam-y)-
+          y*theta/gam
+          )
+  }
+  
+  if(give){
+    if(bins){stop("'give' and 'bins' cannot both be TRUE")}
+    f <- function(n){
+      integrate(integrand, lower=0, upper=gam, n=n)
+    }
+  } else {
+    f <- function(n){
+      integrate(integrand, lower=0, upper=gam, n=n)$value
+    }
+  }
+  out <- sapply(1:J,f)
+  if(!bins){
+    return(out)
+  } else {
+    n <- floor(log(J)/log(2))
+    u <- 0:(n-1)
+    jj <- rbind(1,cbind(1+2^u,2^(u+1)))
+    f <- function(o){sum(out[o[1]:o[2]])}
+    ans <- apply(jj,1,f)
+    transfer <- out[c(2^u,2^n)]/2
+    transfer[is.na(transfer)] <- 0
+    ans <- ans-transfer
+    ans[-1] <- ans[-1]+transfer[-n]
+    return(ans)
+  }
+}
+
+"zsm" <- function(J,P,m){
+  Pstar <- m*(J-1)*P/(1-m)
+  Nstar <- (J-m)/(1-m)-Pstar
+  Nj <- 0:J
+  return(
+         exp(
+             +lgamma(J+1)
+             -lgamma(Nj+1)
+             -lgamma(J-Nj+1)
+             +lgamma(Nj+Pstar)
+             +lgamma(Nstar-Nj)
+             -lgamma(Nj+Pstar+Nstar-Nj)
+             -lgamma(Pstar)
+             -lgamma(Nstar-J)
+             +lgamma(Pstar+Nstar-J)
+             )
+         )
+}
+
+"isolate" <- function(a,size=no.of.ind(a),replace=TRUE){
+  if(replace){
+    a <- as.count(a)
+    return(as.count(sample(names(a),prob=as.vector(a),size=size,replace=TRUE)))
+  } else {
+    a <- as.census(a)
+    return(as.count(sample(a,size=size,replace=FALSE)))
+  }
+}
+
+"logkda.pari" <-
+function (a, numerical = TRUE) 
+{
+  parifn <-
+    '
+logKDAvec(abund) = 
+{
+local(S,J,n,m,k,k0,k1,k2,Told,Tnew,specabund,i,j,Sdiff,cnt1,cnt2);
+abund = vecsort(abund);
+S = length(abund);
+J = sum(k = 1,S,abund[k]);
+maxabund = abund[S];
+Sdiff = 1; for(i = 2,S,if(abund[i] != abund[i - 1],Sdiff++));
+specabund = matrix(2,Sdiff,i,j,0); specabund[1,1] = abund[1]; specabund[2,1] = 1;
+cnt1 = 1; cnt2 = 1;
+for(i = 2,S,   
+   if(abund[i] != abund[i - 1],
+       cnt1++;
+       cnt2 = 1;
+       specabund[1,cnt1] = abund[i];
+       specabund[2,cnt1] = cnt2
+   ,
+       cnt2++;
+       specabund[2,cnt1] = cnt2
+   )
+);
+
+polyn = vector(1,i,1);
+i = 1;
+if(specabund[1,i] == 1,i++);
+Told = vector(1,i,1);
+for(n = 2,maxabund,
+   Tnew = vector(n,m,(n > m) * Told[min(n-1,m)] + Told[max(1,m - 1)] * (m - 1)/(n - 1) + 0. );   
+   if(n == specabund[1,i],
+       for(k0 = 1,specabund[2,i],
+          lenpolyn2 = length(polyn) + length(Tnew) - 1;
+          polyn = vector(lenpolyn2,k1,sum(k2 = max(1,k1 + 1 - length(Tnew)),min(length(polyn),k1),polyn[k2] * Tnew[k1 + 1 - k2]));
+          
+       );
+       i++;       
+   );
+   Told = vector(n,m,Tnew[m]);
+);
+logKDA = log(polyn);
+
+logKDA
+}
+'
+
+       count.string <- paste(as.vector(a),collapse=",")
+       executable.string <-
+paste(
+"echo '",
+parifn,
+"logKDAvec([",count.string ,"])' |gp -q")
+if(numerical){
+return(
+as.numeric( unlist( strsplit(gsub("\\[|\\]","",paste(system(executable.string, intern=TRUE),collapse="")), ",") ) )
+) } else {
+return(system(executable.string, intern=TRUE))
+}
+
+}
+
+"logkda" <- function(a, method="pari", ...)
+{
+  return(switch(method,
+                a11  = logkda.a11 (a, ...),
+                R    = logkda.R   (a, ...),
+                pari = logkda.pari(a, ...)
+                )
+         )
+}
+
+
+"vallade.eqn5" <- function(JM, theta, k){
+  (theta/k)*
+    exp(
+        +lgamma(JM+1)
+        -lgamma(JM+1-k)
+        +lgamma(JM+theta-k)
+        -lgamma(JM+theta)
+        )
+}
+
+"vallade.eqn7" <- function(JM,theta){
+  sum(theta/(theta+(0:(JM-1))))
+}
+
+"vallade.eqn12" <- function(J,omega,m,n){
+  mu <- (J-1)*m/(1-m)
+  exp(
+      +lgamma(J+1)
+      -lgamma(J-n+1)
+      -lgamma(n+1)
+      
+      +lgamma(mu*omega+n)
+      -lgamma(mu*omega  )
+
+      +lgamma(mu*(1-omega)+(J-n))
+      -lgamma(mu*(1-omega)      )
+
+      -lgamma(mu+J)
+      +lgamma(mu  )
+      )
+}
+
+"vallade.eqn14" <- function(J,theta,m,n){
+  op <- options()
+  options(warn= -1) 
+  
+  f <- function(n){
+    sum(vallade.eqn12(J,omega=(1:J)/J,m=m,n=n)*
+        vallade.eqn5(J,theta,1:J))
+  }
+  out <- sapply(n,f)
+  options(op)
+  return(out)
+}
+
+"vallade.eqn16" <- function(J,theta,mu){
+
+  "poch.gen" <- function(n){
+    f <- function(i){polynomial(c(i,1))}
+    out <- f(0)
+    for(i in 1:(n-1)){
+      out <- out * f(i)
+    }
+    return(out)
+  }
+  alpha <- poch.gen(J)
+  f <- function(i){
+    alpha.trunc <- alpha
+    alpha.trunc[1:i] <- 0
+    theta/(theta+i)*
+      as.function.polynomial(alpha.trunc)(mu)
+  }
+  return(sum(sapply(1:(J-1),f))*exp(lgamma(mu)-lgamma(mu+J)))
+}
+
+"vallade.eqn17" <- function(mu,theta,omega,give=FALSE){
+  f <- function(u,mu,omega){
+    exp(
+        +lgamma(mu+1)
+        -lgamma(mu-mu*u+1)
+        -lgamma(mu*u+1)
+        )*
+          (1-omega)^(mu*u-1)*
+            omega^(mu*(1-u)-1)*
+              u^theta
+  }
+  if(is.infinite(mu)){
+    return(theta*(1-omega)^(theta-1)/omega)
+  } else {
+    jj <- integrate(f,lower=0,upper=1,mu=mu,omega=omega)
+    if(give){
+      return(jj)
+    } else {
+      return(mu*theta*jj$value)
+    }
+  }
+}
+
+"alonso.eqn6" <- function(JM, n, theta){
+  (theta/n)*
+    exp(
+        +lgamma(JM+1)
+        -lgamma(JM+1-n)
+        +lgamma(JM+theta-n)
+        -lgamma(JM+theta)
+        )
+}
+
+"alonso.eqn11" <- function(J, n, theta){
+  beta(n,J-n+theta)* theta*
+      exp(lgamma(J+1)-lgamma(n+1)-lgamma(J-n+1))
+}
+                                    
+"alonso.eqn12" <- function(J, n, theta, give=FALSE){
+  if (length(n) > 1) {
+    func <- match.fun(sys.call()[[1]])
+    return(sapply(n, func,J=J,theta=theta,give=FALSE))
+  }
+  f <- function(x){exp(-x*J)*(x*J)^n/factorial(n)*(1-x)^(theta-1)/x}
+  jj <- integrate(f, lower=0, upper=1)
+  if(give){
+    return(jj)
+  } else {
+    return(theta*jj$value)
+  }
+}
+

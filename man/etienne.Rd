@@ -1,22 +1,24 @@
 \name{etienne}
 \alias{etienne}
+\alias{Etienne}
 \alias{optimal.params}
 \title{Etienne's sampling formula}
 \description{
   Function \code{etienne()} returns the probability of a given dataset
-  given theta and m according to the Etienne's sampling formula.
-  Function \code{optimal.params()} returns the maximum likelihood
-  estimates for theta  and m using  numerical optimization
+  given \code{theta} and \code{m} according to the Etienne's sampling
+  formula.  Function \code{optimal.params()} returns the maximum likelihood
+  estimates for \code{theta} and \code{m} using numerical optimization
 }
 \usage{
 etienne(theta, m, D, log.kda = NULL, give.log = TRUE, give.like = TRUE)
-optimal.params(D, start = NULL, give = FALSE, ...) 
+optimal.params(D, log.kda = NULL, start = NULL, give = FALSE, ...) 
 }
 \arguments{
   \item{theta}{Fundamental biodiversity parameter}
   \item{m}{Immigration probability}
   \item{D}{Dataset; a count object}
-  \item{log.kda}{The KDA as defined in equation A11 of the reference}
+  \item{log.kda}{The KDA as defined in equation A11 of Etienne 2005.
+    See details section}
   \item{give.log}{Boolean, with default \code{TRUE} meaning to return
     the logarithm of the value}
   \item{give.like}{Boolean, with default \code{TRUE} meaning to return
@@ -43,12 +45,18 @@ optimal.params(D, start = NULL, give = FALSE, ...)
 where \eqn{K(D,A)} is given by function \code{logkda} (qv).  It might be
 useful to know the (trivial) identity for the Pochhammer symbol
 documented in \code{theta.prob.Rd}.  For convenience, Etienne's
-
 Function \code{optimal.params()} uses \code{optim()} to return the
 maximum likelihood estimate for theta and m.
 
 Compare function \code{optimal.theta()}, which is restricted to no
-dispersal limitation, ie \eqn{m=1}x
+dispersal limitation, ie \eqn{m=1}.
+
+Argument \code{log.kda} is optional: this is the \eqn{K(D,A)} as defined
+in equation A11 of Etienne 2005; it is computationally expensive to
+calculate.  If it is supplied,. the functions documented here will not
+have to calculate it from scratch: this saves a considerable amount of
+time.
+
 
 }
 \references{R. S. Etienne 2005. \dQuote{A new sampling formula for
@@ -57,13 +65,14 @@ dispersal limitation, ie \eqn{m=1}x
 \seealso{\code{\link{logkda}},\code{\link{optimal.theta}}}
 \examples{
 data(butterflies)
-optimal.params(butterflies)
+\dontrun{optimal.params(butterflies)}  #takes too long without PARI/GP
 
 
 #Now the one from Etienne 2005, supplementary online info:
 
 zoo <- count(c(pigs=1, dogs=1, cats=2, frogs=3, bats=5, slugs=8))
-optimal.params(zoo)   #compare his answer of 7.0479586 and 0.22635923.
+l <- logkda.R(zoo, use.brob=TRUE)  # Use logkda() if pari/gp is available
+optimal.params(zoo, log.kda=l)  #compare his answer of 7.047958 and 0.22635923.
 
 }
 \keyword{math}

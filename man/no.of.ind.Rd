@@ -3,6 +3,7 @@
 \alias{no.of.spp}
 \alias{no.of.singletons}
 \alias{no.of.extinct}
+\alias{maximal.abundance}
 \alias{singletons}
 \alias{extinct}
 \alias{extant}
@@ -15,6 +16,8 @@ singletons, etc
 no.of.ind(x)
 no.of.spp(x, include.extinct=FALSE)
 no.of.singletons(x)
+no.of.extinct(x)
+maximal.abundance(x)
 singletons(x)
 extinct(x)
 extant(x)
@@ -37,6 +40,9 @@ extant(x)
 
   Function \code{no.of.extinct()} returns the number of extinct species.
 
+  Function \code{maximal.abundance()} returns the abundance of the most
+  abundant species.
+  
   Function \code{singletons()} returns a \code{count} object containing
   only the singletons: each abundance is one.
 

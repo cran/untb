@@ -37,8 +37,8 @@ Function \code{fishers.alpha()} solves for \eqn{\alpha}{alpha} given
 \references{
 R. A. Fisher and A. S. Corbet and C. B. Williams 1943. \dQuote{The
 relation between the number of species and the number of individuals in
-a random sample of an animal population}, Journal of animal ecology,
-volume 12, pp 42--58
+a random sample of an animal population}, \emph{Journal of Animal
+Ecology}, volume 12, pp 42--58
   }
 \author{Robin K. S. Hankin}
 \examples{

@@ -37,7 +37,7 @@ Uses the simulation method on page 289 of Hubbell.
 }
 \note{
   If \code{pad} is \code{TRUE}, and you set \code{string} to
-  \dQuote{\code{extinct.}}, things will break.
+  \dQuote{\code{extinct}}, things will break.
 }
 \references{S. P. Hubbell.  The Unified Neutral Theory of Biodiversity.
   Princeton University Press, 2001}
