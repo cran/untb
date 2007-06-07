@@ -1,5 +1,7 @@
 \name{bci}
 \alias{bci}
+\alias{BCI}
+\concept{Barro Colorado Island}
 \docType{data}
 \title{Barro Colorado Island (BCI) dataset}
 \description{
@@ -26,10 +28,13 @@
 }
 \references{
   \itemize{
+    \item R. Condit, S. P. Hubbell and R. B. Foster 2005. \emph{Barro
+      Colorado Forest Census Plot Data} \url{http://ctfs.si.edu/datasets/bci}
     \item \url{http://en.wikipedia.org/wiki/Barro_Colorado_Island}
     \item S. P. Hubbell 2001.  \dQuote{The Unified Neutral Theory of
-  Biodiversity}.  Princeton University Press.
+      Biodiversity}.  Princeton University Press.
+    \item
+    \url{http://ctfs.si.edu/datasets/bci/Terms\%20and\%20conditions.htm}
   }
-
 }
 \keyword{datasets}
