@@ -52,7 +52,7 @@ logkda(a, method="pari", ...)
  }
 \references{
 R. S. Etienne 2005. \dQuote{A New Sampling Formula for Neutral
-Biodiversity}.  \emph{Ecology Letters}, volume {8}, pp253--260.
+Biodiversity}.  \emph{Ecology Letters}, volume 8, pp253--260.
 \code{doi: 10.111/j.1461-0248.2004.00717.x}
 
 C. Batut and K. Belabas and D. Bernardi and H. Cohen and M. Olivier
