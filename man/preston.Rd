@@ -47,12 +47,20 @@ where \eqn{\phi_i}{phi_i} is the number of species with abundance
   Function \code{preston()} returns an object of class \dQuote{\code{preston}}.
 }
 \references{
-  F. W. Preston 1948. \dQuote{The Commonness, and Rarity, of Species}.
-  Ecology 29(3):254-283
+  \itemize{
+    \item
+    F. W. Preston 1948. \dQuote{The Commonness, and Rarity, of Species}.
+    Ecology 29(3):254-283
 
-  R. A. Chisholm and M. A. Burgman 2004. \dQuote{The unified neutral
-    theory of biodiversity and biogeography: comment}.  Ecology 85(11):
-  3172-3174 
+    \item
+    R. A. Chisholm and M. A. Burgman 2004. \dQuote{The unified neutral
+      theory of biodiversity and biogeography: comment}.  Ecology 85(11):
+    3172-3174
+
+    \item
+    S. P. Hubbell 2001.  \dQuote{The Unified Neutral Theory of Biodiversity}.
+    Princeton University Press
+    }
 }
 \author{Robin K. S. Hankin}
 \seealso{\code{\link{phi}}}

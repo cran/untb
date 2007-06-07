@@ -10,7 +10,6 @@ neutral theory.
 \usage{
 rand.neutral(J, theta=NULL, prob.of.mutate=NULL, string = NULL, pad = FALSE)
 }
-
 \arguments{
   \item{J}{Size of metacommunity}
   \item{theta}{Fundamental biodiversity number \eqn{\theta}{theta}.
@@ -33,14 +32,16 @@ rand.neutral(J, theta=NULL, prob.of.mutate=NULL, string = NULL, pad = FALSE)
    
 }
 \details{
-Uses the simulation method on page 289 of Hubbell.
+Uses the simulation method on page 289 of Hubbell (2001).
 }
 \note{
   If \code{pad} is \code{TRUE}, and you set \code{string} to
   \dQuote{\code{extinct}}, things will break.
 }
-\references{S. P. Hubbell.  The Unified Neutral Theory of Biodiversity.
-  Princeton University Press, 2001}
+\references{
+  S. P. Hubbell 2001.  \dQuote{The Unified Neutral Theory of Biodiversity}.
+  Princeton University Press.
+}
 \author{Robin K. S. Hankin}
 \seealso{\code{\link{untb}}}
 \examples{

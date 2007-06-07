@@ -3,7 +3,7 @@
 \alias{plot.preston}
 \title{Print and plot objects of class Preston}
 \description{
-Print and plot objects of class Preston}
+  Print and plot objects of class Preston
 }
 \usage{
 \method{print}{preston}(x, ...)
@@ -19,7 +19,6 @@ Print and plot objects of class Preston}
   Intended to work with the output of function \code{preston()}.
 
   See examples section for how to annotate a Preston plot.
-  
 }
 \seealso{\code{\link{preston}}}
 \examples{

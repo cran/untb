@@ -53,19 +53,34 @@ extant(x)
   only the extant species: each abundance is greater than zero.
 
 }
-\references{Hubbell}
+\references{
+  S. P. Hubbell.  \dQuote{The Unified Neutral Theory of Biodiversity}.
+  Princeton University Press, 2001.
+}
 \author{Robin K. S. Hankin}
-\note{It is sometimes useful to include species with an abundance of
+\note{
+  It is sometimes useful to include species with an abundance of
   zero when, for example, taking a single row of the Saunders dataframe.
-
-  The default for \code{include.extinct} is \code{FALSE} because this is
-  required for (eg) \code{optimal.theta()}.
   
-  In function \code{singletons()}, the code for setting the names
-  is a dog's breakfast}
+  The default for \code{include.extinct} is \code{FALSE} because this is
+  required for (eg) \code{optimal.theta()}
+}
 \examples{
 data(butterflies)
 no.of.spp(butterflies)
 no.of.ind(butterflies)
+
+jj1 <- count(c(dogs=7,pigs=3,crabs=1,slugs=1))
+jj2 <- count(c(squid=0,octopus=0,nautilus=0))
+jj3 <- count(c(bugs=3,rats=1,crabs=0,fish=0))
+
+extinct(jj1 + jj2) 
+extinct(jj3)               #cats 'n' fish
+extant(jj3)                #bugs and rats
+
+singletons(jj1)
+singletons(jj2)           # empty 
+singletons(jj1 + jj3)     # crabs, rats and slugs
+
 }
 \keyword{math}

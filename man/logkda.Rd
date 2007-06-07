@@ -56,8 +56,7 @@ Biodiversity}.  \emph{Ecology Letters}, volume {8}, pp253--260.
 \code{doi: 10.111/j.1461-0248.2004.00717.x}
 
 C. Batut and K. Belabas and D. Bernardi and H. Cohen and M. Olivier
-2000.  \dQuote{User's guide to PARI/GP}.  \code{url:
-  \code{http://www.parigp-home.de/}}
+2000.  \dQuote{User's guide to PARI/GP}.  \url{http://www.parigp-home.de/}
 
 }
 \author{Robin K. S. Hankin; \code{logkda()} is an \R\ transliteration of
@@ -65,13 +64,17 @@ C. Batut and K. Belabas and D. Bernardi and H. Cohen and M. Olivier
   material) due to Chave.
 }
 \note{
-  Function \code{logkda.a11()} is included because
-  the computational method is a direct transcription of formula A11; it
-  is very slow.
+  If \code{method} takes its default value of \dQuote{\code{pari}}, and
+  \code{pari/gp} is not installed (the test is \code{gp --version}),
+  then the method is changed to \code{R} and a warning given.
+  
+  Function \code{logkda.a11()} is included because the computational
+  method is a direct transcription of formula A11; it is very slow.
 
-  It would be nice to use \code{gp2c} (rather than \code{gp}) but I can't
-  make the \dQuote{\code{-g}} flag work properly; and I had to hack
-  \code{gp2c-run} to make it call \code{gp} with the \code{-q} flag.
+  It would be nice to use \code{gp2c} (rather than \code{gp}) but I
+  can't make the \dQuote{\code{-g}} flag work properly; and I had to
+  hack \code{gp2c-run} to make it call \code{gp} with the \code{-q}
+  flag
 }
 \seealso{\code{\link{etienne}},\code{\link{logS1}}}
 \examples{

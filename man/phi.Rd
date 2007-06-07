@@ -23,7 +23,10 @@ phi(x,addnames=TRUE)
   and empty otherwise.  Function \code{phi()} is used by
   \code{theta.prob()}.
 }
-\references{Hubbell}
+\references{
+  S. P. Hubbell 2001.  \dQuote{The Unified Neutral Theory of Biodiversity}.
+  Princeton University Press.
+}
 \author{Robin K. S. Hankin}
 \note{The code for setting the names is a dog's breakfast}
 \seealso{\code{\link{preston}}}

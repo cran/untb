@@ -23,7 +23,7 @@ theta.likelihood(theta, x=NULL, S=NULL, J=NULL, give.log=TRUE)
     not be specified if \code{S} and \code{J} are known.}
 }
 \details{
-  The probability is given on page 122 of Hubbell:
+  The probability is given on page 122 of Hubbell (2001):
   \deqn{\frac{J!\theta^S}{
       1^{\phi_1}2^{\phi_2}\ldots J^{\phi_J}
       \phi_1!\phi_2!\ldots \phi_J!
@@ -37,28 +37,29 @@ theta.likelihood(theta, x=NULL, S=NULL, J=NULL, give.log=TRUE)
 
   Etienne observes that the denominator is equivalent to a Pochhammer
 symbol \eqn{(\theta)_J}{(theta)_J}, so is thus readily evaluated as
-\eqn{\Gamma(\theta+J)/\Gamma(\theta)}{Gamma(theta+J)/Gamma(theta)}.
-
-
-
-    
+\eqn{\Gamma(\theta+J)/\Gamma(\theta)}{Gamma(theta+J)/Gamma(theta)}
+(Abramowitz and Stegun 1965, equation 6.1.22). 
 }
 \references{
-  S. P. Hubbell.  The Unified Neutral Theory of Biodiversity.
-  Princeton University Press, 2001.
+  \itemize{
+    \item S. P. Hubbell 2001.
+    \dQuote{The Unified Neutral Theory of Biodiversity},
+    Princeton University Press.
 
-\url{http://en.wikipedia.org/wiki/Untb}
+    \item M. Abramowitz and I. A. Stegun 1965.
+    \emph{Handbook of Mathematical Functions}, New York: Dover
+  }
 }
 \author{Robin K. S. Hankin}
 \note{
   If estimating \code{theta}, use \code{theta.likelihood()} rather than
-  \code{theta.probability()} because the former function is
-  \strong{much} faster: the latter calculates a factor that is
+  \code{theta.probability()} because the former function generally
+  executes \strong{much} faster: the latter calculates a factor that is
   independent of \code{theta}.
   
-  The likelihood function \eqn{L(\theta}{L(theta)} is any function of
+  The likelihood function \eqn{L(\theta)}{L(theta)} is any function of
   \eqn{\theta}{theta} proportional, for fixed observation \eqn{z}, to
-  the probability density \eqn{f(z,\theta)}{f(z,theta)}.  Thus there is
+  the probability density \eqn{f(z,\theta)}{f(z,theta)}.  There is thus
   a slight notational inaccuracy in speaking of \dQuote{the} likelihood
   function which is defined only up to a multiplicative constant.  Note
   also that the \dQuote{support} function is usually defined as a

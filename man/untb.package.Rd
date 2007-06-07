@@ -2,7 +2,7 @@
 \alias{untb-package}
 \docType{package}
 \title{
-Unified neutral theory of biodiversity
+  Unified neutral theory of biodiversity
 }
 \description{
   Numerical simulations, and visualizations, of the unified
@@ -28,21 +28,17 @@ compact representation, especially for large ecosystems.
 The package simulates neutral ecological drift using function
 \code{untb()}.  Function \code{display.untb()} displays a semi-animated
 graphic of an ecosystem undergoing neutral drift.
-
-
-
 }
 \author{
-Robin K. S. Hankin
+  Robin K. S. Hankin
 
-Maintainer: <r.hankin@noc.soton.ac.uk>
+  Maintainer: <r.hankin@noc.soton.ac.uk>
 }
 \references{
-  S. P. Hubbell.  The Unified Neutral Theory of Biodiversity.
-  Princeton University Press, 2001.
+  S. P. Hubbell 2001.  \dQuote{The Unified Neutral Theory of Biodiversity}.
+  Princeton University Press.
 }
 \keyword{math}
-}
 \examples{
 a <- untb(start=rep(1,100),prob=0.005,gens=5000,keep=FALSE)
 preston(a)

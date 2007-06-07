@@ -16,7 +16,10 @@ expected.abundance(J, theta)
   Returns an object of class \code{count}.  Species names (capital
   letters) are assigned by function \code{count()}. 
 }
-\references{Hubbell 2001}
+\references{
+  S. P. Hubbell 2001.  \dQuote{The Unified Neutral Theory of Biodiversity}.
+  Princeton University Press.
+}
 \author{Robin K. S. Hankin}
 \note{
   Function is very slow even for moderate J. 

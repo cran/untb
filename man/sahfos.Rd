@@ -10,7 +10,7 @@ Species counts in the North Atlantic
  \url{http://192.171.163.165/data.htm}
 }
 \references{
-  Warner AJ and Hays GC 1994.  Sampling by the Continuous Plankton Recorder Survey. Progress in Oceanography, 34: 237-256
+  Warner AJ and Hays GC 1994.  \dQuote{Sampling by the Continuous Plankton Recorder Survey}. Progress in Oceanography, 34: 237-256
 }
 \examples{
 data(sahfos)

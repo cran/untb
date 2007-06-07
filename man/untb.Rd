@@ -49,8 +49,8 @@ select.immigrate(a, D=length(a), prob.of.immigrate=0, meta)
   (and opaque) integer arithmetic.
 }
 \references{
-  S. P. Hubbell.  The Unified Neutral Theory of Biodiversity.
-  Princeton University Press, 2001.
+  S. P. Hubbell 2001.  \dQuote{The Unified Neutral Theory of Biodiversity}.
+  Princeton University Press.
 }
 \author{Robin K. S. Hankin}
 \examples{

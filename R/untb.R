@@ -352,7 +352,11 @@
 }
 
 "count" <- function(a){
-  out <- sort(as.table(a),decreasing=TRUE)
+  if(length(a)>0){
+    out <- sort(as.table(a),decreasing=TRUE)
+  } else {
+    out <- integer(0)
+  }
   class(out) <-  c("count","table")
   return(out)
 }
@@ -371,8 +375,10 @@
     out <- count(a)
   } else {
     out <- count(table(a))
-  }    
-  names(out) <- paste(add,names(out),sep="")
+  }
+  if(length(out)>0){
+    names(out) <- paste(add,names(out),sep="")
+  }
   return(out)
 }
 
@@ -400,7 +406,7 @@ fishers.alpha <- function(N, S, give=FALSE){
 
 "singletons" <- function(x){
   x <- as.count(x)
-  names(x[x==1])
+  count(x[x==1])
 }
 
 "no.of.singletons" <- function(x){
@@ -440,7 +446,7 @@ fishers.alpha <- function(N, S, give=FALSE){
 "simpson" <- function(x){
   x <- as.count(x)
   J <- no.of.ind(x)
-  return(1-sum(x*(x-1))/(J*(J-1)))
+  return(1-sum(x*x)/(J*J))
 }
 
 "rand.neutral" <- function(J, theta=NULL, prob.of.mutate=NULL, string=NULL, pad=FALSE){
@@ -778,6 +784,15 @@ return(system(executable.string, intern=TRUE))
 
 "logkda" <- function(a, method="pari", ...)
 {
+
+  if(
+     (system("gp --version", ignore.std=TRUE) != 0) &
+     (method == "pari")
+     ){
+    warning("pari/gp not installed: method changed to R.  This is much slower than using pari/gp")
+    method <- "pari"
+  }
+        
   return(switch(method,
                 a11  = logkda.a11 (a, ...),
                 R    = logkda.R   (a, ...),

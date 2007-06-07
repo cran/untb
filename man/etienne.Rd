@@ -42,21 +42,21 @@ optimal.params(D, log.kda = NULL, start = NULL, give = FALSE, ...)
        \frac{I^A}{(I)_J}
        \right)}{omitted...see PDF}
 
-where \eqn{K(D,A)} is given by function \code{logkda} (qv).  It might be
-useful to know the (trivial) identity for the Pochhammer symbol
-documented in \code{theta.prob.Rd}.  For convenience, Etienne's
-Function \code{optimal.params()} uses \code{optim()} to return the
-maximum likelihood estimate for theta and m.
+where \eqn{\log K(D,A)} is given by function \code{logkda()} (qv).  It
+might be useful to know the (trivial) identity for the Pochhammer symbol
+[written \eqn{(z)_n}] documented in \code{theta.prob.Rd}.  For
+convenience, Etienne's Function \code{optimal.params()} uses
+\code{optim()} to return the maximum likelihood estimate for
+\eqn{\theta}{theta} and \eqn{m}.
 
 Compare function \code{optimal.theta()}, which is restricted to no
 dispersal limitation, ie \eqn{m=1}.
 
 Argument \code{log.kda} is optional: this is the \eqn{K(D,A)} as defined
 in equation A11 of Etienne 2005; it is computationally expensive to
-calculate.  If it is supplied,. the functions documented here will not
-have to calculate it from scratch: this saves a considerable amount of
-time.
-
+calculate.  If it is supplied, the functions documented here will not
+have to calculate it from scratch: this can save a considerable amount
+of time
 
 }
 \references{R. S. Etienne 2005. \dQuote{A new sampling formula for
