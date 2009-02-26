@@ -27,31 +27,33 @@ extant(x)
   \item{include.extinct}{In function \code{no.of.spp()}, Boolean
     argument with \code{TRUE} meaning to include extinct species (ie
     species with an abundance of zero), and default \code{FALSE}
-    meaning to return the number of extant species.}
+    meaning to return the number of extant species}
 }
 \details{
-  Function \code{no.of.spp()} returns the number of species in an
-  ecosystem object, treating exctinct species in line with argument
-  \code{include.extinct}.
-
-  Function \code{no.of.ind()} returns the number of individuals.
-
-  Function \code{no.of.singletons()} returns the number of singletons.
-
-  Function \code{no.of.extinct()} returns the number of extinct species.
-
-  Function \code{maximal.abundance()} returns the abundance of the most
-  abundant species.
-  
-  Function \code{singletons()} returns a \code{count} object containing
-  only the singletons: each abundance is one.
-
-  Function \code{extinct()} returns a \code{count} object containing
-  only the extinct species: each abundance is zero.
-
-  Function \code{extant()} returns a \code{count} object containing
-  only the extant species: each abundance is greater than zero.
-
+  \itemize{
+    \item
+    Function \code{no.of.spp()} returns the number of species in an
+    ecosystem object, treating exctinct species in line with argument
+    \code{include.extinct}
+    \item
+    Function \code{no.of.ind()} returns the number of individuals
+    \item
+    Function \code{no.of.singletons()} returns the number of singletons
+    \item
+    Function \code{no.of.extinct()} returns the number of extinct species
+    \item
+    Function \code{maximal.abundance()} returns the abundance of the most
+    abundant species
+    \item
+    Function \code{singletons()} returns a \code{count} object containing
+    only the singletons: each abundance is one
+    \item
+    Function \code{extinct()} returns a \code{count} object containing
+    only the extinct species: each abundance is zero
+    \item
+    Function \code{extant()} returns a \code{count} object containing
+    only the extant species: each abundance is greater than zero
+  }
 }
 \references{
   S. P. Hubbell.  \dQuote{The Unified Neutral Theory of Biodiversity}.

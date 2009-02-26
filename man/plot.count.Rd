@@ -12,17 +12,17 @@
   \item{uncertainty}{Boolean,
     with \code{TRUE} meaning to show bootstrapped estimates for the
     species diversity curve, and default \code{FALSE} meaning to omit
-    this.}
+    this}
   \item{expectation}{Boolean,
     with \code{TRUE} meaning to plot expected abundances, and default \code{FALSE}
     meaning not to plot them.  \strong{Warning} this option takes a
-    loooong time to run, even for moderate values of \eqn{J}.}
+    loooong time to run, even for moderate values of \eqn{J}}
   \item{theta}{Fundamenal biodiversity number used if argument
     \code{uncertainty} or \code{expectation} are \code{TRUE}.  Default
     value of \code{NULL} means to use the maximum likelihood estimate
     returned by function \code{optimal.theta()}}    
   \item{n}{Number of bootstrapped estimates to plot}
-  \item{\dots}{Extra parameters passed to \code{untb()}.}
+  \item{\dots}{Extra parameters passed to \code{untb()}}
 }
 \details{
 Plots a ranked abundance curve, optionally with parametrically resampled
@@ -38,5 +38,9 @@ plot(copepod)
 
 data(butterflies)
 plot(butterflies,uncertainty=TRUE)
+
+x <- count(c(pigs=1, dogs=1, cats=2, frogs=3, bats=5, slugs=8))
+plot(x,expectation=TRUE,ylim=c(0.5,10))
+
 }
 \keyword{math}

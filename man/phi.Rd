@@ -40,6 +40,13 @@ unphi(freq, string="spp")
 \note{The code for setting the names is a dog's breakfast}
 \seealso{\code{\link{preston}}}
 \examples{
+
+jj <- c(rep("oak",5) ,rep("ash",2),rep("elm",3),"pine","tea","yew")
+a <- as.count(jj)
+
+phi(a)
+unphi(phi(a))   #should match 'a' except for species names (which are lost)
+
 data(butterflies)
 phi(butterflies,add=FALSE)
 

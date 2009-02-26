@@ -162,8 +162,9 @@
 }
 
 "plot.census" <- function(x, uncertainty=FALSE, expectation=FALSE, theta=NULL, n=10, ...){
-  x <- as.count(x)
-  plot.default(x,log="y", col="red",pch=16,type="b", xlab="species rank in abundance", ylab="abundance", ...)
+  xx <- unclass(as.count(x))
+  dimnames(xx) <- NULL
+  plot.default(xx,log="y", col="red",pch=16,type="b", xlab="species rank in abundance", ylab="abundance", ...)
   if(uncertainty|expectation){
     J <- no.of.ind(x)
     if(is.null(theta)){
@@ -305,7 +306,6 @@
     }
   }
 
-
 "theta.likelihood" <- function(theta, x=NULL, S=NULL, J=NULL, give.log=TRUE){
    if(!is.null(x)){
     J <- no.of.ind(x)
@@ -317,8 +317,9 @@
     return(theta^S*exp(lgamma(theta)-lgamma(theta+J)))
   }
 }
+
 "phi" <- function(x,addnames=TRUE){
-  x <- as.count(x)
+  x <- extant(as.count(x))
   jj <- table(x)
   out <- tabulate(x)
   if(addnames){
@@ -334,8 +335,6 @@
   count(out)
 }
 
-
-
 "is.census" <- function(a){
   inherits(a,"census")
 }
@@ -345,7 +344,7 @@
 }
 
 "census" <- function(a){
-  out <- as.factor(rep(names(a),times=a))
+  out <- factor(rep(names(a),times=a),levels=names(a))
   class(out) <- c("census","factor")
   return(out)
 }
@@ -525,6 +524,10 @@ fishers.alpha <- function(N, S, give=FALSE){
   as.count(as.table(tapply(both,names(both),sum)))
 }
 
+"+.census" <- function(a,b){
+  as.census(as.count(a)+as.count(b))
+} 
+
 "logkda.a11" <- function(a){
   N <- no.of.ind(a)
   S <- no.of.spp(a)
@@ -658,7 +661,6 @@ fishers.alpha <- function(N, S, give=FALSE){
              ))
   }
 }
-
 
 "volkov" <- function(J, params, bins=FALSE, give=FALSE){
   theta <- params[1]
@@ -949,10 +951,7 @@ fishers.alpha <- function(N, S, give=FALSE){
   }
 }
 
-
-"logkda.polyn" <-
-function (a) 
-{
+"logkda.polyn" <- function (a){
   a <- as.count(a)
   a <- extant(a)
   species <- no.of.spp(a)

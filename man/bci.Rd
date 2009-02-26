@@ -34,10 +34,10 @@
       Biodiversity}.  Princeton University Press.
     \item
     \url{http://ctfs.si.edu/datasets/bci/Terms\%20and\%20conditions.htm}
-    \item R. K. S. Hankin 2007.  \emph{Introducing \bold{untb}, an R
+    \item R. K. S. Hankin 2007.  \dQuote{Introducing \bold{untb}, an R
       package for simulating ecological drift under the unified neutral
-      theory of biodiversity}.  Journal of Statistical Software, volume
-    22, issue 12
+      theory of biodiversity}.  \emph{Journal of Statistical Software},
+      volume 22, issue 12
   }
 }
 \keyword{datasets}

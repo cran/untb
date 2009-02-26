@@ -31,16 +31,21 @@ is.count(a)
   An object of class \dQuote{count} is a table sorted from most to least
   abundant species.  The singletons are thus tabulated last.
 
-  Function \code{count()} takes a vector, the elements of which
-  are interpreted as abundances.  If any of the elements are named, the
-  names are interpreted as species names (unnamed elements are given
-  the null name).  If the vector is unnamed, then the species names are
+  Function \code{count()} takes a vector, the elements of which are
+  interpreted as abundances.  If any of the elements are named, the
+  names are interpreted as species names (unnamed elements are given the
+  null name).  If the vector is unnamed, then the species names are
   upper case letters, with the first element being named
   \dQuote{\code{A}}, the second \dQuote{\code{B}}, and so on; this
-  behaviour is inherited from \code{as.table()}.  Note that
-  this means that the species names are not necessarily in alphabetical
-  order.  To access or change species names, use \code{names()} and
+  behaviour is inherited from \code{as.table()}.  Note that this means
+  that the species names are not necessarily in alphabetical order.
+  From version 1.6-9, zero elements are interpreted as zero abundance
+  species (ie extinct).
+
+  To access or change species names, use \code{names()} and
   \code{names<-} respectively.
+
+  Function \code{as.count()} coerces its argument to count form.
 
 }
 \value{
@@ -49,8 +54,14 @@ is.count(a)
 \author{Robin K. S. Hankin}
 \seealso{\code{\link{census}}}
 \examples{ 
+
+
+
 a <- c(rep("oak",5) ,rep("ash",2),rep("elm",3),rep("xx",4))
 as.count(a)
+
+
+
 
 data(saunders)
 as.count(saunders[1,-(1:150)])

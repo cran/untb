@@ -40,7 +40,7 @@ vallade.eqn17(mu, theta, omega, give=FALSE)
 }
 \references{
   M. Vallade and B. Houchmandzadeh 2003. \dQuote{Analytical Solution of a
-    Neutral Model of Biodiversity}, Physical Review E, volume 68.
+    Neutral Model of Biodiversity}, \emph{Physical Review E}, volume 68.
   doi: 10.1103/PhysRevE.68.061902
 }
 \author{Robin K. S. Hankin}

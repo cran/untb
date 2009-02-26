@@ -40,7 +40,7 @@ simpson(x, with.replacement=FALSE)
     Princeton University Press.
     \item F. He and X.-S. Hu 2005.
     \dQuote{Hubbell's Fundamental Biodiversity
-      Parameter and the Simpson Diversity Index}.  Ecology Letters, volume 8,
+      Parameter and the Simpson Diversity Index}.  \emph{Ecology Letters}, volume 8,
     pp386-390. doi: \code{10.1111/j.1461-0248.2005.00729.x}
     \item E. H. Simpson 1949. \dQuote{Measurement of diversity},
     \emph{Nature}, volume 163, p688

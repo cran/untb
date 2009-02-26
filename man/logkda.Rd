@@ -61,7 +61,7 @@ C. Batut and K. Belabas and D. Bernardi and H. Cohen and M. Olivier
 2000.  \dQuote{User's guide to PARI/GP}.  \url{http://www.parigp-home.de/}
 
 }
-\author{Robin K. S. Hankin; \code{logkda()} is an \R\ transliteration of
+\author{Robin K. S. Hankin; \code{logkda()} is an \R transliteration of
   \code{pari/gp} code appearing in Etienne 2005 (supplementary online
   material) due to Chave.
 

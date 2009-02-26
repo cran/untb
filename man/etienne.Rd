@@ -60,7 +60,7 @@ of time
 
 }
 \references{R. S. Etienne 2005. \dQuote{A new sampling formula for
-    biodiversity}.  Ecology letters, 8:253-260}
+    biodiversity}.  \emph{Ecology letters} 8:253-260}
 \author{Robin K. S. Hankin}
 \seealso{\code{\link{logkda}},\code{\link{optimal.theta}}}
 \examples{

@@ -29,11 +29,11 @@ Returns an object of class \dQuote{phi}.
 }
 \references{
 I. Volkov and others 2003. \dQuote{Neutral theory and relative species
-  abundance in ecology}.  Nature, volume 424, number 28.
+  abundance in ecology}.  \emph{Nature}, volume 424, number 28.
   }
 \author{Robin K. S. Hankin}
 \note{
-  The method used is slightly inefficient: the terms to the left ofthe
+  The method used is slightly inefficient: the terms to the left of the
   integral sign [in Volkov's equation 7] are integrated and this is,
   strictly, unnecessary as it is not a function of \eqn{y}.  However,
   taking advantage of this fact results in messy code.

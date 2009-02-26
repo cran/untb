@@ -18,8 +18,8 @@ Returns a vector of size \code{J} showing the probability of the
 stationary abundance being \eqn{1,\ldots,J}{0,1,2,...,J}.
 }
 \references{A. J. McKane and others 2004. \dQuote{Analytic solution of
-    Hubbell's model of local community dynamics}, Theoretical Population
-  Biology 65:67-73}
+    Hubbell's model of local community dynamics}.  \emph{Theoretical Population
+  Biology} 65:67-73}
 \author{Robin K. S. Hankin}
 \note{
   The function uses \code{lgamma()} to avoid numerical overflow

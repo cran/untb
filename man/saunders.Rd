@@ -60,9 +60,7 @@
 
   The \code{saunders} dataset must be arranged as it is because if it
   were transposed, the first row would be the (nonsensical) observation
-  \code{c(T,T,...,T,F,...,F)}. 
-
-  
+  \code{c(T,T,...,T,F,...,F)}.   
 }  
 \note{
   It is not entirely obvious how to derive the summary datasets from the
@@ -80,7 +78,7 @@
       \item M. J. Anderson and others 2005.  \dQuote{Consistency and
 	variation in kelp holdfast assemblages: Spatial patterns of
 	biodiversity for the major phyla at different taxonomic resolutions}.
-      Journal of Experimental Marine Biology and Ecology. Volume 320, pages
+      \emph{Journal of Experimental Marine Biology and Ecology}. Volume 320, pages
       35-56
     }
 }

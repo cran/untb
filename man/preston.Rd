@@ -50,11 +50,11 @@ where \eqn{\phi_i}{phi_i} is the number of species with abundance
   \itemize{
     \item
     F. W. Preston 1948. \dQuote{The Commonness, and Rarity, of Species}.
-    Ecology 29(3):254-283
+    \emph{Ecology} 29(3):254-283
 
     \item
     R. A. Chisholm and M. A. Burgman 2004. \dQuote{The unified neutral
-      theory of biodiversity and biogeography: comment}.  Ecology 85(11):
+      theory of biodiversity and biogeography: comment}.  \emph{Ecology} 85(11):
     3172-3174
 
     \item

@@ -6,7 +6,7 @@
 \description{
 In package untb, ecosystem data is held in one of two preferred forms:
 census data and count data.  Function \code{as.census()} coerces to
-census format 
+census format.
 }
 \usage{
 census(a)
@@ -21,12 +21,9 @@ is.census(a)
   A \dQuote{census} object is a list of individuals in the form of an
   unnamed vector whose elements indicate the individuals' species;
   compare \dQuote{count} objects.
-
+  
   An object of class \dQuote{census} is also an unordered factor.  The
-  levels are always in alphabetical order; the vector itself is sorted
-  so that the individuals of the most abundant species appear first,
-  individuals of the second most abundant species appear second, and so
-  on: the singletons appear last.
+  levels are always in alphabetical order.
   
   Function \code{census()} takes an object of class \dQuote{count} and
   returns an object of class \dQuote{census}.  This function is not
@@ -42,6 +39,16 @@ is.census(a)
 \author{Robin K. S. Hankin}
 \seealso{\code{\link{count}}}
 \examples{
+
+jj <- c(dogs=4,pigs=10,slugs=0,fish=1)
+
+x <- census(jj)   # slugs appear as zero abundance
+extant(x)  # slugs gone
+
+x+x   # count method for census objects: order of elements lost
+
+
+as.census(jj)  # probably NOT what you meant
 
 a <- c(rep("oak",5) ,rep("ash",2),rep("elm",3),rep("xx",4))
 # note that "a" is a plain vector here.

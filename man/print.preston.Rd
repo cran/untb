@@ -18,7 +18,7 @@
 \note{
   Intended to work with the output of function \code{preston()}.
 
-  See examples section for how to annotate a Preston plot.
+  See the vignette for how to annotate a Preston plot.
 }
 \seealso{\code{\link{preston}}}
 \examples{

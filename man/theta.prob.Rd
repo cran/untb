@@ -4,7 +4,7 @@
 \title{Posterior probabilities for theta}
 \description{
   Determines the posterior probability and likelihood for theta,
-  given an ecosystem.
+  given a count object
 }
 \usage{
 theta.prob(theta, x=NULL, give.log=TRUE)
@@ -23,7 +23,8 @@ theta.likelihood(theta, x=NULL, S=NULL, J=NULL, give.log=TRUE)
     not be specified if \code{S} and \code{J} are known.}
 }
 \details{
-  The probability is given on page 122 of Hubbell (2001):
+  The formula was originally given by Ewens (1972) and is shown on
+  page 122 of Hubbell (2001):
   \deqn{\frac{J!\theta^S}{
       1^{\phi_1}2^{\phi_2}\ldots J^{\phi_J}
       \phi_1!\phi_2!\ldots \phi_J!
@@ -35,7 +36,7 @@ theta.likelihood(theta, x=NULL, S=NULL, J=NULL, give.log=TRUE)
   The likelihood is thus given by
   \deqn{\frac{\theta^S}{\prod_{k=1}^J\left(\theta+k-1\right)}.}{theta^S/((theta)*(theta+1)*...*(theta+J)).}
 
-  Etienne observes that the denominator is equivalent to a Pochhammer
+Etienne observes that the denominator is equivalent to a Pochhammer
 symbol \eqn{(\theta)_J}{(theta)_J}, so is thus readily evaluated as
 \eqn{\Gamma(\theta+J)/\Gamma(\theta)}{Gamma(theta+J)/Gamma(theta)}
 (Abramowitz and Stegun 1965, equation 6.1.22). 
@@ -45,7 +46,8 @@ symbol \eqn{(\theta)_J}{(theta)_J}, so is thus readily evaluated as
     \item S. P. Hubbell 2001.
     \dQuote{The Unified Neutral Theory of Biodiversity},
     Princeton University Press.
-
+    \item W. J. Ewens 1972.  \dQuote{The sampling theory of selectively
+      neutral alleles}, \emph{Theoretical Population Biology}, \bold{3}:87--112
     \item M. Abramowitz and I. A. Stegun 1965.
     \emph{Handbook of Mathematical Functions}, New York: Dover
   }
@@ -88,19 +90,13 @@ theta.likelihood(theta=2,gg)
 
 optimize(f=theta.likelihood,interval=c(0,100),maximum=TRUE,x=gg)
 
-a <- untb(start=rep(1,1000),gens=1000,prob=1e-3)
 
+## An example showing that theta.prob() is a PDF:
 
-
-\dontrun{
-
-## First, an example showing that theta.prob() is a PDF:
-library(untb)
 a <- count(c(dogs=3,pigs=3,hogs=2,crabs=1,bugs=1,bats=1))
 x <- parts(no.of.ind(a))
-f <- function(x){theta.prob(theta=1.123,extant(count(x)))}
+f <- function(x){theta.prob(theta=1.123,extant(count(x)),give.log=FALSE)}
 sum(apply(x,2,f))  ## should be one exactly.
-}
 }
 
 \keyword{math}
