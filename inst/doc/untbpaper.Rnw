@@ -87,7 +87,7 @@
 
 <<overalloptions,echo=FALSE,print=FALSE>>=
 <<results=hide>>=
-require("untb")
+require("untb",quietly=TRUE)
 @ 
 
 <<time_saver,echo=FALSE,print=FALSE>>=
