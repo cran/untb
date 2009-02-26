@@ -1,4 +1,4 @@
-require(untb, quietly=TRUE, save=FALSE)
+require(untb, quietly=TRUE)
 
 "saunders" <- 
 structure(list(exposed = c(TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, 
