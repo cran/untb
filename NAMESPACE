@@ -1,5 +1,11 @@
 exportPattern("^[^\\.]")
+
 importClassesFrom(Brobdingnag, "brob")
 importMethodsFrom(Brobdingnag, "[")
 importMethodsFrom(Brobdingnag, "sum")
- 
+importFrom(Brobdingnag, as.brob)
+
+importFrom(partitions,parts)
+importFrom(partitions,blockparts)
+importFrom(polynom,polynomial)
+importFrom(polynom,as.polynomial)

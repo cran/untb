@@ -731,10 +731,10 @@ fishers.alpha <- function(N, S, give=FALSE){
   }
 }
 
-"logkda.pari" <- function (a, numerical = TRUE){
-  if ((system("gp --version", intern=FALSE,ignore.stderr=TRUE)) != 0) {
-    warning("pari/gp not installed: method changed to 'polyn'")
-    return(logkda.polyn(a))
+"logkda.pari" <- function (a, numerical = TRUE, gp_binary="gp"){
+  command <- paste(gp_binary, "--version", sep=" ")
+  if ((system(command, intern=FALSE,ignore.stderr=TRUE)) != 0) {
+    stop("pari/gp not installed: try gp_binary='/usr/local/bin/gp' or similar")
   }
   
   pari_string <- "
@@ -783,13 +783,13 @@ fishers.alpha <- function(N, S, give=FALSE){
  "
 
   if (isTRUE(as.logical(Sys.info()[1] == "Windows"))) {
-    return(.logkda.pari.windows(a, numerical, pari_string))
+    return(logkda_pari_windows(a, numerical, pari_string))
   } else {
-    return(.logkda.pari.unix(a, numerical, pari_string))
+    return(logkda_pari_unix(a, numerical, pari_string, gp_binary))
   }
 }
 
-".logkda.pari.windows" <- function (a, numerical, pari_string) {
+"logkda_pari_windows" <- function (a, numerical, pari_string) {
   a <- extant(as.count(a))
   count.string <- paste(as.vector(a), collapse = ",")
   pari_string <- paste(pari_string,"print(logKDAvec([", count.string, "]))")
@@ -805,22 +805,32 @@ fishers.alpha <- function(N, S, give=FALSE){
   return(logkda.list)
 }
 
-".logkda.pari.unix" <- function (a, numerical, pari_string) {
+"logkda_pari_unix" <- function (a, numerical, pari_string, gp_binary) {
 
+  filename <- paste('"/tmp/', system("uuidgen",intern=TRUE),'"',sep="")
   count.string <- paste(as.vector(a),collapse=",")
+
   executable.string <-
     paste(
-          "echo '",
-          pari_string,
-          "logKDAvec([",count.string ,"])' |gp -q")
+      "echo '",
+      pari_string, "\n",
+      "answer = logKDAvec([",  count.string,  "]) \n",
+      "write(", filename, ",answer)'",
+      "|", gp_binary, " -q")
+
+  ignore <- system(executable.string,intern=TRUE)
+  system("sync")
+  filename <- substr(filename,2,nchar(filename)-1)  # remove quotes
+  out <- readLines(filename)
+  ignore <- system(paste("rm ", filename, sep=" "),intern=TRUE)
   if(numerical){
-    return(
-           as.numeric( unlist( strsplit(gsub("\\[|\\]","",paste(system(executable.string, intern=TRUE),collapse="")), ",") ) )
-           )
+    out <- substr(out,2,nchar(out)-1)
+    out <- gsub(",", "",out)
+    out <- as.numeric(strsplit(out, " ")[[1]])
+    return(out)
   } else {
-    return(system(executable.string, intern=TRUE))
+    return(out)
   }
-  
 }
 
 "logkda" <- function(a, method="pari", ...)

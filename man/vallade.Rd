@@ -66,8 +66,10 @@ sum(k*vallade.eqn5(JM,theta=5,k))  # should be JM=100 exactly.
     vallade.eqn17(mu,theta=5, omega=omega)
   }
   plot(omega,
-  omega*5,type="n",xlim=c(0,1),ylim=c(0,5),xlab=expression(omega),ylab=expression(omega*g[C](omega)),main="Figure
-  3 of Vallade and Houchmandzadeh")
+  omega*5,type="n",xlim=c(0,1),ylim=c(0,5),
+        xlab=expression(omega),
+        ylab=expression(omega*g[C](omega)),
+        main="Figure 3 of Vallade and Houchmandzadeh")
   points(omega,omega*sapply(omega,f,mu=0.5),type="l")
   points(omega,omega*sapply(omega,f,mu=1),type="l")
   points(omega,omega*sapply(omega,f,mu=2),type="l")

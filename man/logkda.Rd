@@ -4,6 +4,8 @@
 \alias{logkda.R}
 \alias{logkda.pari}
 \alias{logkda.polyn}
+\alias{logkda_pari_unix}
+\alias{logkda_pari_windows}
 \title{Etienne's K(D,A)}
 \description{
 Calculates Etienne's \eqn{K(D,A)} using a variety of different methods
@@ -11,9 +13,11 @@ Calculates Etienne's \eqn{K(D,A)} using a variety of different methods
 \usage{
 logkda.R(a, use.brob=TRUE)
 logkda.a11(a)
-logkda.pari(a, numerical=TRUE)
+logkda.pari(a, numerical=TRUE, gp_binary = "gp")
 logkda.polyn(a)
 logkda(a, method="pari", ...)
+logkda_pari_unix(a, numerical, pari_string, gp_binary)
+logkda_pari_windows(a, numerical, pari_string)
 }
 \arguments{
   \item{a}{Count object}
@@ -21,12 +25,13 @@ logkda(a, method="pari", ...)
     \code{TRUE} meaning to use Brobdingnagian numbers for the
     calculation.  This is slower but allows one to analyze larger
     datasets}
-  \item{numerical}{In function \code{logkda.pari()}, Boolean, with
-    default \code{TRUE} meaning to return a numerical vector and
-    \code{FALSE} meaning to return the string produced by
-    \code{pari/gp}}
+  \item{numerical}{Boolean, with default \code{TRUE} meaning to coerce
+    to a numerical vector (thereby losing precision), and \code{FALSE}
+    meaning to return the string produced by \code{pari/gp}}
   \item{method}{In function \code{logkda()}, a string specifying which
     method to use.  Takes \dQuote{R}, \dQuote{a11}, or \dQuote{pari}}
+  \item{pari_string,gp_binary}{configuration variables (not intended to
+    be changed by the user)}
   \item{...}{In function \code{logkda()}, further arguments which are
     passed to the other functions}
 }
@@ -51,7 +56,15 @@ logkda(a, method="pari", ...)
   \overline{s}\left(n_i,1\right)}}{ommitted...see PDF}
    where \eqn{\overline{s}\left(n_i,a_i\right)} are Stirling numbers of
    the first kind (see \code{logS1}).
+
+Function \code{logkda.pari()} dispatches to either
+\code{logkda_pari_unix()} or \code{logkda_pari_windows()} but the
+windows function is not guaranteed to work.
+
  }
+
+
+ 
 \references{
 R. S. Etienne 2005. \dQuote{A New Sampling Formula for Neutral
 Biodiversity}.  \emph{Ecology Letters}, volume 8, pp253--260.
