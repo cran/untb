@@ -1,11 +1,13 @@
 \name{phi}
 \alias{phi}
+\alias{unphi}
 \title{Hubbell's phi}
 \description{
 Hubbell's phi: counts of species abundances 
 }
 \usage{
 phi(x,addnames=TRUE)
+unphi(freq, string="spp")
 }
 \arguments{
   \item{x}{Ecosystem vector; is coerced to class \code{count}}
@@ -14,6 +16,9 @@ phi(x,addnames=TRUE)
     to the species with abundance \eqn{i} if unique.  Set to
     \code{FALSE} to suppress this, which is useful if the species names
     are long}
+  \item{freq}{Frequency data (eg as returned by \code{phi()})}
+  \item{string}{Character; species name to prepend (using \code{NULL}
+    can be confusing)}
 }
 \details{
   Function \code{phi()} coerces its argument to a \code{count} object and
@@ -22,6 +27,10 @@ phi(x,addnames=TRUE)
   \eqn{i}th element is the species with abundance \eqn{i} if unique
   and empty otherwise.  Function \code{phi()} is used by
   \code{theta.prob()}.
+
+  Function \code{unphi()} does the reverse: given the output of
+  \code{phi()}, it returns a corresponding \code{count} object.  Note that
+  species names are lost.
 }
 \references{
   S. P. Hubbell 2001.  \dQuote{The Unified Neutral Theory of Biodiversity}.
@@ -33,5 +42,8 @@ phi(x,addnames=TRUE)
 \examples{
 data(butterflies)
 phi(butterflies,add=FALSE)
+
+summary(unphi(phi(butterflies)))  #should match 'summary(butterflies)'
+
 }
 \keyword{math}

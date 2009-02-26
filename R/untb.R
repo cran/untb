@@ -328,6 +328,14 @@
   return(out) 
 }
 
+"unphi" <- function(freq, string="spp"){
+  out <- rep(seq_along(freq),freq)
+  names(out) <- paste(string, seq_len(sum(freq)),sep="")
+  count(out)
+}
+
+
+
 "is.census" <- function(a){
   inherits(a,"census")
 }
