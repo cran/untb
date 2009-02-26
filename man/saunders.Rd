@@ -8,11 +8,14 @@
 \docType{data}
 \title{Dataset due to Saunders}
 \description{
-  A dataframe with each row representing species inventories for a kelp
-  holdfast (\code{saunders}) together with a Boolean flag indicating
-  whether the holdfast was in a sheltered or exposed location.  Also two
-  data frames, one for the 20 exposed holdfasts (\code{saunders.exposed})
-  and one for the 20 sheltered holdfasts (\code{saunders.sheltered}).
+
+  A dataframe showing species inventories for a kelp holdfast
+  (\code{saunders}) including a Boolean flag indicating whether the
+  holdfast was in a sheltered or exposed location.
+
+  Also two data frames, one for the 20 exposed holdfasts
+  (\code{saunders.exposed}) and one for the 20 sheltered holdfasts
+  (\code{saunders.sheltered}).
 
   Also three \code{count} objects, giving counts for all organisms
   (\code{saunders.tot}), all those from exposed locations
@@ -21,17 +24,22 @@
 }
 \usage{data(saunders)}
 \format{
-  Dataset \code{saunders} is a data frame with 40 observations on 177
-  variables.  The observations (rows) are 40 holdfasts and the variables
-  are, with the exception of the first one, the numbers of each of 176
-  species living there.  The first variable is a Boolean, indicating
-  whether or not that holdfast was exposed (\code{TRUE}) or sheltered
-  (\code{FALSE}).
+
+  Dataset \code{saunders} is a dataframe with 40 observations on 177
+  variables.  Each row corresponds to a holdfast.  The first column is
+  Boolean, indicating whether or not that holdfast was exposed
+  (\code{TRUE}) or sheltered (\code{FALSE}).  The other columns show
+  species abundances for each of 176 species.
   
-  Summary datasets \code{saunders}, \code{saunders.exposed}, and
-  \code{saunders.sheltered} are objects of class \code{count} that
-  are the species abundance for sheltered holdfasts, exposed
-  holdfasts, and the entire dataset.
+  Summary datasets \code{saunders.sheltered.tot},
+  \code{saunders.exposed.tot}, and \code{saunders.tot} are objects of
+  class \code{count} that are the species abundance for sheltered
+  holdfasts, exposed holdfasts, and the entire dataset.
+
+  The user will probably be most interested in \code{saunders.sheltered}
+  and \code{saunders.exposed}, which are the \strong{transpose} of the
+  appropriate rows of \code{saunders}.  Thus these dataframes have 176
+  rows, one per species and 20 rows, one per holdfast.
 }
 \details{
 
@@ -48,7 +56,12 @@
   of Kawau Island (a stretch of roughly 20 km).  Four sites were
   wave-exposed, four were sheltered (although two of the latter were
   arguably quite tidally-dominated).  Each site had a spatial extent of
-  roughly one hectare.  They were collected from 5 - 10 November, 2003
+  roughly one hectare.  They were collected from 5 - 10 November, 2003.
+
+  The \code{saunders} dataset must be arranged as it is because if it
+  were transposed, the first row would be the (nonsensical) observation
+  \code{c(T,T,...,T,F,...,F)}. 
+
   
 }  
 \note{
@@ -67,7 +80,7 @@
       \item M. J. Anderson and others 2005.  \dQuote{Consistency and
 	variation in kelp holdfast assemblages: Spatial patterns of
 	biodiversity for the major phyla at different taxonomic resolutions}.
-      Journal of Experimental Marine Biology and Ecology. volume 320, pages
+      Journal of Experimental Marine Biology and Ecology. Volume 320, pages
       35-56
     }
 }
@@ -77,7 +90,7 @@ plot(saunders.sheltered.tot, uncertainty=TRUE, n=1)
 
 preston(saunders.tot)
 
-plot(extant(extractor(saunders,1)))
+optimal.params.sloss(saunders.exposed)
 
 }
 \keyword{datasets}

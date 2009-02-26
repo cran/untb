@@ -3,6 +3,7 @@
 \alias{logkda.a11}
 \alias{logkda.R}
 \alias{logkda.pari}
+\alias{logkda.polyn}
 \title{Etienne's K(D,A)}
 \description{
 Calculates Etienne's \eqn{K(D,A)} using a variety of different methods
@@ -11,6 +12,7 @@ Calculates Etienne's \eqn{K(D,A)} using a variety of different methods
 logkda.R(a, use.brob=TRUE)
 logkda.a11(a)
 logkda.pari(a, numerical=TRUE)
+logkda.polyn(a)
 logkda(a, method="pari", ...)
 }
 \arguments{
@@ -62,6 +64,12 @@ C. Batut and K. Belabas and D. Bernardi and H. Cohen and M. Olivier
 \author{Robin K. S. Hankin; \code{logkda()} is an \R\ transliteration of
   \code{pari/gp} code appearing in Etienne 2005 (supplementary online
   material) due to Chave.
+
+  Function \code{logkda.polyn()} provided by Francois Munoz.
+
+  Function \code{.logkda.pari.windows()} provided by Andrea Manica and
+  Francois Munoz.
+  
 }
 \note{
   If \code{method} takes its default value of \dQuote{\code{pari}}, and
@@ -70,6 +78,11 @@ C. Batut and K. Belabas and D. Bernardi and H. Cohen and M. Olivier
   
   Function \code{logkda.a11()} is included because the computational
   method is a direct transcription of formula A11; it is very slow.
+  
+  Function \code{logkda.pari()} is a wrapper for
+  \code{.logkda.pari.windows()} or \code{.logkda.pari.unix()}.  It uses
+  \dQuote{\code{if(R.Version()$os == 'windows')}} to check for windows
+  operating systems.
 
   It would be nice to use \code{gp2c} (rather than \code{gp}) but I
   can't make the \dQuote{\code{-g}} flag work properly; and I had to

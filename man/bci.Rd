@@ -14,10 +14,9 @@
   The BCI dataset is not included in the \pkg{untb} package, because its
   licence appears to be inconsistent with the GPL.
 
-  It is discussed here because it was used as an example dataset in a
-  paper currently under review at the Journal of Statistical Software;
-  and because it has become a standard dataset in the field of
-  ecological dynamics.
+  It is discussed here because it was used as an example dataset in
+  Hankin 2007.
+
 }
 \source{
   \itemize{
@@ -35,6 +34,10 @@
       Biodiversity}.  Princeton University Press.
     \item
     \url{http://ctfs.si.edu/datasets/bci/Terms\%20and\%20conditions.htm}
+    \item R. K. S. Hankin 2007.  \emph{Introducing \bold{untb}, an R
+      package for simulating ecological drift under the unified neutral
+      theory of biodiversity}.  Journal of Statistical Software, volume
+    22, issue 12
   }
 }
 \keyword{datasets}

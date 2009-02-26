@@ -36,7 +36,7 @@ optimal.theta(x, interval=NULL, N=NULL, like=NULL, ...)
   \code{etienne()} and \code{optimal.params()}.
 }
 \author{Robin K. S. Hankin}
-\seealso{\code{\link{etienne}}}
+\seealso{\code{\link{etienne}},\code{\link{optimal.params.sloss}},\code{\link{optimal.params.gst}}}
 \examples{
 data(butterflies)
 optimal.prob(butterflies)

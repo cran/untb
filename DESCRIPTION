@@ -1,7 +1,7 @@
 Package: untb
 Type: Package
 Title: ecological drift under the UNTB
-Version: 1.4-2
+Version: 1.6-1
 Date: 2009-26-02
 Author: Robin K. S. Hankin
 SystemRequirements: PARI/GP >= 2.3.0 [strongly recommended for
@@ -11,9 +11,10 @@ Maintainer: Robin K. S. Hankin <hankin.robin@gmail.com>
 Description: A collection of utilities for biodiversity data. Includes
         the simulation of ecological drift under Hubbell's Unified
         Neutral Theory of Biodiversity, and the calculation of various
-        diagnostics such as Preston curves.
+        diagnostics such as Preston curves.  Now includes functionality
+        provided by Francois Munoz and Andrea Manica.
 License: GPL
 URL: http://www.r-project.org
-Packaged: Thu Mar 19 20:32:39 2009; rksh
+Packaged: 2009-10-11 19:25:49 UTC; rksh
 Repository: CRAN
-Date/Publication: 2009-03-30 06:47:08
+Date/Publication: 2009-10-15 11:09:11

@@ -5,7 +5,6 @@
   return(count(apply(sweep(a,2,probs,"*"),1,sum)))
 }
 
-
 "display.untb" <- function(start, gens=100, prob.of.mutate=0, cex=3,
                       individually=TRUE, ask=FALSE,
                       flash=FALSE, delay=0, cols=NULL, ...){
@@ -443,10 +442,14 @@ fishers.alpha <- function(N, S, give=FALSE){
   cat("estimated theta: ",x[[6]],"\n")
 }
 
-"simpson" <- function(x){
+"simpson" <- function(x,with.replacement=FALSE){
   x <- as.count(x)
   J <- no.of.ind(x)
-  return(1-sum(x*x)/(J*J))
+  if(with.replacement){
+    return(1-sum(x*x)/(J*J))
+  } else {
+    return(1-sum(x*(x-1))/(J*(J-1)))
+  }
 }
 
 "rand.neutral" <- function(J, theta=NULL, prob.of.mutate=NULL, string=NULL, pad=FALSE){
@@ -718,89 +721,108 @@ fishers.alpha <- function(N, S, give=FALSE){
   }
 }
 
-"logkda.pari" <-
-function (a, numerical = TRUE) 
-{
-  parifn <-
-    '
-logKDAvec(abund) = 
-{
-local(S,J,n,m,k,k0,k1,k2,Told,Tnew,specabund,i,j,Sdiff,cnt1,cnt2);
-abund = vecsort(abund);
-S = length(abund);
-J = sum(k = 1,S,abund[k]);
-maxabund = abund[S];
-Sdiff = 1; for(i = 2,S,if(abund[i] != abund[i - 1],Sdiff++));
-specabund = matrix(2,Sdiff,i,j,0); specabund[1,1] = abund[1]; specabund[2,1] = 1;
-cnt1 = 1; cnt2 = 1;
-for(i = 2,S,   
-   if(abund[i] != abund[i - 1],
-       cnt1++;
-       cnt2 = 1;
-       specabund[1,cnt1] = abund[i];
-       specabund[2,cnt1] = cnt2
-   ,
-       cnt2++;
-       specabund[2,cnt1] = cnt2
-   )
-);
+"logkda.pari" <- function (a, numerical = TRUE){
+  if ((system("gp --version", intern=FALSE,ignore.stderr=TRUE)) != 0) {
+    warning("pari/gp not installed: method changed to 'polyn'")
+    return(logkda.polyn(a))
+  }
+  
+  pari_string <- "
+ logKDAvec(abund) =
+ {
+ local(S,J,n,m,k,k0,k1,k2,Told,Tnew,specabund,i,j,Sdiff,cnt1,cnt2);
+ abund = vecsort(abund);
+ S = length(abund);
+ J = sum(k = 1,S,abund[k]);
+ maxabund = abund[S];
+ Sdiff = 1; for(i = 2,S,if(abund[i] != abund[i - 1],Sdiff++));
+ specabund = matrix(2,Sdiff,i,j,0); specabund[1,1] = abund[1]; specabund[2,1] = 1;
+ cnt1 = 1; cnt2 = 1;
+ for(i = 2,S,
+    if(abund[i] != abund[i - 1],
+        cnt1++;
+        cnt2 = 1;
+        specabund[1,cnt1] = abund[i];
+        specabund[2,cnt1] = cnt2
+    ,
+        cnt2++;
+        specabund[2,cnt1] = cnt2
+    )
+ );
 
-polyn = vector(1,i,1);
-i = 1;
-if(specabund[1,i] == 1,i++);
-Told = vector(1,i,1);
-for(n = 2,maxabund,
-   Tnew = vector(n,m,(n > m) * Told[min(n-1,m)] + Told[max(1,m - 1)] * (m - 1)/(n - 1) + 0. );   
-   if(n == specabund[1,i],
-       for(k0 = 1,specabund[2,i],
-          lenpolyn2 = length(polyn) + length(Tnew) - 1;
-          polyn = vector(lenpolyn2,k1,sum(k2 = max(1,k1 + 1 - length(Tnew)),min(length(polyn),k1),polyn[k2] * Tnew[k1 + 1 - k2]));
-          
-       );
-       i++;       
-   );
-   Told = vector(n,m,Tnew[m]);
-);
-logKDA = log(polyn);
+ polyn = vector(1,i,1);
+ i = 1;
+ if(specabund[1,i] == 1,i++);
+ Told = vector(1,i,1);
+ for(n = 2,maxabund,
+    Tnew = vector(n,m,(n > m) * Told[min(n-1,m)] + Told[max(1,m - 1)] * (m - 1)/(n - 1) + 0. );
+    if(n == specabund[1,i],
+        for(k0 = 1,specabund[2,i],
+           lenpolyn2 = length(polyn) + length(Tnew) - 1;
+           polyn = vector(lenpolyn2,k1,sum(k2 = max(1,k1 + 1 - length(Tnew)),min(length(polyn),k1),polyn[k2] * Tnew[k1 + 1 - k2]));
 
-logKDA
-}
-'
+        );
+        i++;
+    );
+    Told = vector(n,m,Tnew[m]);
+ );
+ logKDA = log(polyn);
 
-       count.string <- paste(as.vector(a),collapse=",")
-       executable.string <-
-paste(
-"echo '",
-parifn,
-"logKDAvec([",count.string ,"])' |gp -q")
-if(numerical){
-return(
-as.numeric( unlist( strsplit(gsub("\\[|\\]","",paste(system(executable.string, intern=TRUE),collapse="")), ",") ) )
-) } else {
-return(system(executable.string, intern=TRUE))
+ logKDA
+ }
+ "
+
+  if (isTRUE(as.logical(Sys.info()[1] == "Windows"))) {
+    return(.logkda.pari.windows(a, numerical, pari_string))
+  } else {
+    return(.logkda.pari.unix(a, numerical, pari_string))
+  }
 }
 
+".logkda.pari.windows" <- function (a, numerical, pari_string) {
+  a <- extant(as.count(a))
+  count.string <- paste(as.vector(a), collapse = ",")
+  pari_string <- paste(pari_string,"print(logKDAvec([", count.string, "]))")
+  cat(pari_string, file = "logkda.gp")
+  logkda.list <- shell("gp -q logkda", intern = TRUE)
+  logkda.list <- paste(logkda.list,sep="",collapse="")
+  
+  if (numerical) {
+    logkda.list <- (as.numeric(unlist(strsplit(gsub("\\[|\\]", "", logkda.list), ","))))
+  }
+  
+  shell("del logkda.gp")
+  return(logkda.list)
+}
+
+".logkda.pari.unix" <- function (a, numerical, pari_string) {
+
+  count.string <- paste(as.vector(a),collapse=",")
+  executable.string <-
+    paste(
+          "echo '",
+          pari_string,
+          "logKDAvec([",count.string ,"])' |gp -q")
+  if(numerical){
+    return(
+           as.numeric( unlist( strsplit(gsub("\\[|\\]","",paste(system(executable.string, intern=TRUE),collapse="")), ",") ) )
+           )
+  } else {
+    return(system(executable.string, intern=TRUE))
+  }
+  
 }
 
 "logkda" <- function(a, method="pari", ...)
 {
-
-  if(
-     (system("gp --version", ignore.std=TRUE) != 0) &
-     (method == "pari")
-     ){
-    warning("pari/gp not installed: method changed to R.  This is much slower than using pari/gp")
-    method <- "pari"
-  }
-        
   return(switch(method,
-                a11  = logkda.a11 (a, ...),
-                R    = logkda.R   (a, ...),
-                pari = logkda.pari(a, ...)
+                a11   = logkda.a11  (a, ...),
+                R     = logkda.R    (a, ...),
+                pari  = logkda.pari (a, ...),
+                polyn = logkda.polyn(a, ...)
                 )
          )
 }
-
 
 "vallade.eqn5" <- function(JM, theta, k){
   (theta/k)*
@@ -917,5 +939,31 @@ return(system(executable.string, intern=TRUE))
   } else {
     return(theta*jj$value)
   }
+}
+
+
+"logkda.polyn" <-
+function (a) 
+{
+  a <- as.count(a)
+  a <- extant(a)
+  species <- no.of.spp(a)
+  
+  for(k in seq_len(no.of.spp(a))){
+     coeff <- c(0);
+     if(a[k]>1){
+       for(i in seq_len(a[k]-1)){
+         coeff <-
+           c(coeff,exp(logS1vect[i+(a[k]-1)*(a[k]-2)/2]+lfactorial(i-1)-lfactorial(a[k]-1)))
+       }
+     }
+     coeff <- c(coeff,1);
+     if(k==1) {
+       poly.kda <- as.polynomial(coeff)
+     } else {
+       poly.kda <- prod(poly.kda,as.polynomial(coeff))
+     }
+   }
+  return(log(coef(poly.kda)[coef(poly.kda)!=0]))
 }
 

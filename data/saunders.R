@@ -457,16 +457,16 @@ FALSE, FALSE, FALSE, FALSE), Ophiactis.resiliens = c(13, 16,
 "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", 
 "38", "39", "40"), class = "data.frame")
 
-jj <- apply(saunders,2,sum)[-1]
-"saunders.tot" <- count(jj[jj>0])
+jj <- t(saunders)[-1,]
+jj.exposed <- saunders[,1]
 
-"saunders.exposed" <- subset(saunders, saunders[,1])[,-1]
+"saunders.tot" <- count(apply(jj,1,sum))
 
-"saunders.exposed.tot" <-  count(apply(saunders.exposed,2,sum))
+"saunders.exposed"   <- jj[, jj.exposed]
+"saunders.sheltered" <- jj[,!jj.exposed]
 
-"saunders.sheltered" <-
-subset(saunders, !saunders[,1])[,-1]
-
-"saunders.sheltered.tot" <- count(apply(saunders.sheltered,2,sum))
+"saunders.exposed.tot"   <- count(apply(saunders.exposed,1,sum))
+"saunders.sheltered.tot" <- count(apply(saunders.sheltered,1,sum))
 
 rm(jj)
+rm(jj.exposed)

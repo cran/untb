@@ -1,5 +1,7 @@
 \name{untb-package}
 \alias{untb-package}
+\concept{Chinese restaurant}
+\concept{Chinese restaurant process}
 \docType{package}
 \title{
   Unified neutral theory of biodiversity
@@ -32,11 +34,17 @@ graphic of an ecosystem undergoing neutral drift.
 \author{
   Robin K. S. Hankin
 
-  Maintainer: <r.hankin@noc.soton.ac.uk>
+  Maintainer: <hankin.robin@gmail.com>
 }
 \references{
-  S. P. Hubbell 2001.  \dQuote{The Unified Neutral Theory of Biodiversity}.
-  Princeton University Press.
+  \itemize{
+    \item S. P. Hubbell 2001.  \dQuote{The Unified Neutral Theory of
+      Biodiversity}.   Princeton University Press.
+    \item R. K. S. Hankin 2007.  \emph{Introducing \bold{untb}, an R
+      package for simulating ecological drift under the unified neutral
+      theory of biodiversity}.  Journal of Statistical Software, volume
+    22, issue 12
+  }
 }
 \keyword{math}
 \examples{
