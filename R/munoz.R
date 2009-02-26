@@ -216,4 +216,4 @@ function (D, nbres=100, ci = FALSE, cint=c(0.025,0.975))
     return(ret);
 }
 
-`.required` <- c("polynom", "untb", "vegan")
+
