@@ -19,21 +19,14 @@
 
 }
 \source{
-  \itemize{
-    \item \url{http://ctfs.si.edu/datasets/bci/abundance/}
-    \item
-    \url{http://www.stri.org/english/research/facilities/terrestrial/barro_colorado/index.php}
-  }  
+    \code{http://www.stri.org/english/research/facilities/terrestrial/barro_colorado/index.php}
 }
 \references{
   \itemize{
     \item R. Condit, S. P. Hubbell and R. B. Foster 2005. \emph{Barro
-      Colorado Forest Census Plot Data} \url{http://ctfs.si.edu/datasets/bci}
-    \item \url{http://en.wikipedia.org/wiki/Barro_Colorado_Island}
+      Colorado Forest Census Plot Data} 
     \item S. P. Hubbell 2001.  \dQuote{The Unified Neutral Theory of
       Biodiversity}.  Princeton University Press.
-    \item
-    \url{http://ctfs.si.edu/datasets/bci/Terms\%20and\%20conditions.htm}
     \item R. K. S. Hankin 2007.  \dQuote{Introducing \bold{untb}, an R
       package for simulating ecological drift under the unified neutral
       theory of biodiversity}.  \emph{Journal of Statistical Software},

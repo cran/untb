@@ -7,9 +7,8 @@ citEntry(entry = "Article",
              biodiversity") 
 	     },
 	 author = personList(
-         person(first = "Robin",
-		middle = "K. S.",
-		last = "Hankin",
+         person(given = c("Robin","K. S."),
+		family = "Hankin",
 		email="hankin.robin@gmail.com")),
 	 journal = "Journal of Statistical Software",
          year = "2007",

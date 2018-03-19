@@ -12,9 +12,6 @@ butterfly species
 A table with names of different butterfly species, and entries
 corresponding to the respective numbers of individuals.
 }
-\source{
-  \url{http://texasnaturalist.net/butterflies/bflyct96.html}
-}
 \references{
 Texas Birding and Naturalist Web
 }

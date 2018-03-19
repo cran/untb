@@ -67,11 +67,14 @@
 	(Orcia Valley, central Italy)}.  \emph{Acta Oecologica}, 23:361-374
   }
 }
+
+\note{Executing \code{optimal.params.sloss(caruso)} does not return
+  useful output.  The reason for this is unknown.}
 \examples{
 data(caruso)
 
 summary(count(caruso[,1]))
 
-optimal.params.sloss(caruso)
+
 }
 \keyword{datasets}

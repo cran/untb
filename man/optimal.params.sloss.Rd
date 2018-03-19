@@ -40,6 +40,9 @@ optimal.params.sloss(D, nbres = 100, ci = FALSE, cint = c(0.025, 0.975))
   88(10):2482-2488 
 }
 \author{ Francois Munoz }
+\note{ The function returns unhelpful output when run with the
+  \code{caruso} dataset as in \code{optimal.params.sloss(caruso)}.  The
+  reason for this behaviour is unknown.}
 \seealso{ \link{optimal.params}, \link{optimal.params.gst} }
 \examples{
 data(ghats)
