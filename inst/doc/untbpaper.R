@@ -186,39 +186,7 @@ if(FALSE){matplot(synthetic.spp,type="l",lty=1,xlab="time (generation)",ylab="ab
 
 
 ###################################################
-### code chunk number 20: SampleTenThousand
-###################################################
-set.seed(0)
-jj <- isolate(rn,size=10000)
-a <- untb(start=jj, prob=0.01, D=10000, gens=1000, meta=rn)
-if(calc_from_scratch){
-  a.logkda <- logkda(a)
-} else {
-  load("a_logkda.Rdata")
-}
-op <- optimal.params(a,log.kda=a.logkda)
-v.opt <- volkov(no.of.ind(a), op, bins=TRUE)
-v.true <- volkov(no.of.ind(a), c(100,0.01), bins=TRUE)
-
-
-###################################################
-### code chunk number 21: PlotSampleTenThousand
-###################################################
-pa <- preston(a,n=12)
-pa.names <- sub(" ", "", names(pa))
-jj <- plot(pa,ylim=c(0,27),axisnames=FALSE,
-ylab="Number of species",xlab="Abundance class")
-axis(1, at=jj, labels=FALSE, lty=0)
-text(jj, par("usr")[3]-0.65, srt=90, cex=0.8, adj=1, labels=pa.names,xpd=TRUE)
-
-points(jj, v.opt[1:12], type="b",col="red",pch=1)
-points(jj, v.true[1:12], type="b",col="blue",pch=4)
-par(xpd=2)
-legend("topright", c("best estimate","true"), pch=c(1,4), col=c("red","blue"), lty=c(1,1))
-
-
-###################################################
-### code chunk number 22: differentThetas
+### code chunk number 20: differentThetas
 ###################################################
 set.seed(0)
 f <- function(gens,p){
