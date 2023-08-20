@@ -4,9 +4,10 @@
 \alias{is.count}
 \title{Construct, coerce, and test for a count object}
 \description{
-  In package untb, ecosystem data is held in one of two preferred forms:
-  census data and count data.  Function \code{count} creates an object
-  of class \dQuote{count}, and \code{as.count()} coerces to this class.
+  In package \pkg{untb}, ecosystem data is held in one of two preferred
+  forms: census data and count data.  Function \code{count} creates an
+  object of class \dQuote{count}, and \code{as.count()} coerces to this
+  class.
 }
 \usage{
 as.count(a,add="")
@@ -24,7 +25,7 @@ is.count(a)
     species names are integers because the display can become confusing}
 }
 \details{
-  A \dQuote{count} object is a list of species together with
+  A \dfn{count} object is a list of species together with
   their abundance.  It also has class \dQuote{table}; compare
   \dQuote{census} objects.
   
@@ -42,8 +43,8 @@ is.count(a)
   From version 1.6-9, zero elements are interpreted as zero abundance
   species (ie extinct).
 
-  To access or change species names, use \code{names()} and
-  \code{names<-} respectively.
+  To access or change species names, use \code{names(x)} and
+  \code{names(x) <- v} respectively.
 
   Function \code{as.count()} coerces its argument to count form.
 

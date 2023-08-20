@@ -11,16 +11,9 @@
   neutral theory of biodiversity
 }
 \details{
-\tabular{ll}{
-Package: \tab untb\cr
-Type: \tab Package\cr
-Version: \tab 1.0\cr
-Date: \tab 2005-10-26\cr
-License: \tab GPL\cr
-}
 
 Package \code{untb} uses two classes of object to represent an
-ecosystem: class \code{count} and class \code{census}.  In essense, a
+ecosystem: class \code{count} and class \code{census}.  In essence, a
 \code{count} object is a table of species abundances and a \code{census}
 object is a list of individuals.  See \code{?census} and \code{?count}
 for more details.  Although objects of either class can be coerced to

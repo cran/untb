@@ -2,9 +2,7 @@
 \alias{+.count}
 \alias{+.census}
 \title{Add two count objects}
-\description{
-Adds two count objects
-}
+\description{Adds two count objects}
 \usage{
 \method{+}{count}(a,b)
 \method{+}{census}(a,b)
@@ -23,6 +21,10 @@ Adds two count objects
   coerced to a count object.
 
   The operation is commutative and associative.
+
+  One might think that the addition method should use the \CRANpkg{frab}
+  package, but this would not account for extinct species.
+  
 }  
 \author{Robin K. S. Hankin, based on an R-help tip from Gabor Grothendiek}
 \examples{

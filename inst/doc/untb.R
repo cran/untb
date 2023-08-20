@@ -1,4 +1,4 @@
-### R code from vignette source 'untbpaper.Rnw'
+### R code from vignette source 'untb.Rnw'
 
 ###################################################
 ### code chunk number 1: overalloptions
@@ -7,7 +7,7 @@
 
 
 ###################################################
-### code chunk number 2: untbpaper.Rnw:90-91
+### code chunk number 2: untb.Rnw:91-92
 ###################################################
 require("untb",quietly=TRUE)
 

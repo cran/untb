@@ -27,23 +27,24 @@ logkda_pari_windows(a, numerical, pari_string)
     datasets}
   \item{numerical}{Boolean, with default \code{TRUE} meaning to coerce
     to a numerical vector (thereby losing precision), and \code{FALSE}
-    meaning to return the string produced by \code{pari/gp}}
+    meaning to return the string produced by \proglang{pari/gp}}
   \item{method}{In function \code{logkda()}, a string specifying which
-    method to use.  Takes \dQuote{R}, \dQuote{a11}, or \dQuote{pari}}
+    method to use.  Takes \code{R}, \code{a11}, or \code{pari}}
   \item{pari_string,gp_binary}{configuration variables (not intended to
     be changed by the user)}
   \item{...}{In function \code{logkda()}, further arguments which are
     passed to the other functions}
 }
 \details{
+
   The user should use function \code{logkda()}, which is a wrapper for
   the other functions.  Note that the default method, \code{pari},
-  requires the pari/gp system to be installed.  This is the preferred
-  option because it is much faster than the other methods.
+  requires the \proglang{pari/gp} system to be installed.  This is the
+  preferred option because it is much faster than the other methods.
   
   Functions \code{logkda.R()} and \code{logkda.pari()} calculate
   \eqn{K(D,A)} using the method appearing in Etienne (2005), supplementary
-  online material; they use \code{R} and \code{pari/gp} respectively.
+  online material; they use \R and \proglang{pari/gp} respectively.
   Function \code{logkda.a11} is a direct implementation of formula A11
   in Etienne (2005).  The formula is
 
@@ -97,10 +98,10 @@ C. Batut and K. Belabas and D. Bernardi and H. Cohen and M. Olivier
   \dQuote{\code{if(R.Version()$os == 'windows')}} to check for windows
   operating systems.
 
-  It would be nice to use \code{gp2c} (rather than \code{gp}) but I
-  can't make the \dQuote{\code{-g}} flag work properly; and I had to
-  hack \code{gp2c-run} to make it call \code{gp} with the \code{-q}
-  flag
+  It would be nice to use \proglang{gp2c} (rather than \proglang{gp})
+  but I can't make the \dQuote{\code{-g}} flag work properly; and I had
+  to hack \code{gp2c-run} to make it call \proglang{gp} with the
+  \code{-q} flag
 }
 \seealso{\code{\link{etienne}},\code{\link{logS1}}}
 \examples{
