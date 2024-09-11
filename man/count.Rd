@@ -4,10 +4,9 @@
 \alias{is.count}
 \title{Construct, coerce, and test for a count object}
 \description{
-  In package \pkg{untb}, ecosystem data is held in one of two preferred
-  forms: census data and count data.  Function \code{count} creates an
-  object of class \dQuote{count}, and \code{as.count()} coerces to this
-  class.
+  In package untb, ecosystem data is held in one of two preferred forms:
+  census data and count data.  Function \code{count} creates an object
+  of class \dQuote{count}, and \code{as.count()} coerces to this class.
 }
 \usage{
 as.count(a,add="")
@@ -25,7 +24,7 @@ is.count(a)
     species names are integers because the display can become confusing}
 }
 \details{
-  A \dfn{count} object is a list of species together with
+  A \dQuote{count} object is a list of species together with
   their abundance.  It also has class \dQuote{table}; compare
   \dQuote{census} objects.
   
@@ -43,8 +42,8 @@ is.count(a)
   From version 1.6-9, zero elements are interpreted as zero abundance
   species (ie extinct).
 
-  To access or change species names, use \code{names(x)} and
-  \code{names(x) <- v} respectively.
+  To access or change species names, use \code{names()} and
+  \code{names<-} respectively.
 
   Function \code{as.count()} coerces its argument to count form.
 
@@ -56,6 +55,10 @@ is.count(a)
 \seealso{\code{\link{census}}}
 \examples{ 
 
+count(c(
+   slugs = 9, pigs = 1, dogs = 1, hogs = 2, bats = 3,
+   cats = 1, frogs = 1, pugs = 2, ants = 1,
+   yaks = 2, rats = 4))
 
 
 a <- c(rep("oak",5) ,rep("ash",2),rep("elm",3),rep("xx",4))

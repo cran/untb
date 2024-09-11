@@ -4,9 +4,9 @@
 \alias{is.census}
 \title{Construct, coerce, and test for a census object}
 \description{
-In package \pkg{untb}, ecosystem data is held in one of two preferred
-forms: census data and count data.  Function \code{as.census()} coerces
-to census format.
+In package untb, ecosystem data is held in one of two preferred forms:
+census data and count data.  Function \code{as.census()} coerces to
+census format.
 }
 \usage{
 census(a)
@@ -18,9 +18,9 @@ is.census(a)
     interpret as species count data; otherwise, interpret as census data}
 }
 \details{
-  A \dfn{census} object is a list of individuals in the form of an
+  A \dQuote{census} object is a list of individuals in the form of an
   unnamed vector whose elements indicate the individuals' species;
-  compare \dfn{count} objects.
+  compare \dQuote{count} objects.
   
   An object of class \dQuote{census} is also an unordered factor.  The
   levels are always in alphabetical order.
